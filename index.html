@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="JourneyGenie AI - Conversational travel planner agent chatbot. Plan trips with local databases and live Gemini AI content.">
+  <title>JourneyGenie AI | Conversational Travel Planner Agent</title>
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <!-- Stylesheet -->
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <!-- Background Blobs -->
+  <div class="blob-bg">
+    <div class="blob blob-1"></div>
+    <div class="blob blob-2"></div>
+    <div class="blob blob-3"></div>
+  </div>
+
+  <div class="app-container">
+    <!-- Header -->
+    <header class="app-header">
+      <div class="logo">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="logo-icon">
+          <path d="M22 2L11 13"></path>
+          <path d="M22 2L15 22L11 13L2 9L22 2Z"></path>
+        </svg>
+        <span>JourneyGenie <span class="badge-tag">AI Agent</span></span>
+      </div>
+      
+      <div class="header-controls">
+        <!-- API Config Toggle Button -->
+        <button id="api-toggle-btn" class="control-btn" style="display: none;" title="AI Settings">
+          🔑 <span class="btn-text">AI Settings</span>
+        </button>
+        <!-- Theme Toggle -->
+        <button id="theme-toggle" class="control-btn" aria-label="Toggle Theme" title="Toggle Theme">
+          <svg id="sun-icon" class="hidden" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="5"></circle>
+            <line x1="12" y1="1" x2="12" y2="3"></line>
+            <line x1="12" y1="21" x2="12" y2="23"></line>
+            <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+            <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+            <line x1="1" y1="12" x2="3" y2="12"></line>
+            <line x1="21" y1="12" x2="23" y2="12"></line>
+            <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+            <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+          </svg>
+          <svg id="moon-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+          </svg>
+        </button>
+      </div>
+    </header>
+
+    <!-- API Config Panel -->
+    <div id="api-config-panel" class="api-config-panel hidden glass-card" style="display: none;">
+      <div class="api-header">
+        <h4>🔑 Google Gemini AI API Configuration</h4>
+        <span id="api-status-badge" class="status-badge offline">Offline Demo Mode</span>
+      </div>
+      <p class="api-desc">Provide your Gemini API key from <a href="https://aistudio.google.com/" target="_blank" rel="noopener">Google AI Studio</a> to enable live conversational generation. Leave blank to run offline using our local destination datasets.</p>
+      <div class="api-input-group">
+        <input type="password" id="gemini-api-key" placeholder="Paste your API key here..." aria-label="Gemini API Key">
+        <button id="save-key-btn" class="primary-btn btn-sm">Save Key</button>
+        <button id="clear-key-btn" class="quit-btn btn-sm hidden">Clear</button>
+      </div>
+    </div>
+
+    <!-- Main Layout Container -->
+    <main class="main-layout">
+      <!-- Left Panel: Chatbot Interface -->
+      <section class="chat-panel glass-card">
+        <div class="chat-panel-header">
+          <div class="agent-avatar">🧞</div>
+          <div class="agent-info" style="flex: 1;">
+            <h3>JourneyGenie Assistant</h3>
+            <span class="agent-status" id="connection-status">Online (Local DB)</span>
+          </div>
+          <button id="reset-chat-btn" class="control-btn btn-sm" title="Clear Chat & Reset" style="padding: 0 10px; height: 32px; font-size: 0.8rem;">
+            🗑️ Reset
+          </button>
+        </div>
+
+        <!-- Chat Conversation Log -->
+        <div class="chat-history" id="chat-history">
+          <!-- Initial bot message will be dynamically injected -->
+        </div>
+
+        <!-- Chat Controls and Suggestions -->
+        <div class="chat-footer">
+          <div class="suggestion-chips-container" id="suggestion-chips">
+            <!-- Dynamic suggestion prompts -->
+          </div>
+          <div class="chat-input-row">
+            <input type="text" id="chat-user-input" placeholder="Say hi or type a destination to start..." aria-label="Chat input field">
+            <button id="chat-send-btn" class="primary-btn" aria-label="Send Message">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="send-icon">
+                <line x1="22" y1="2" x2="11" y2="13"></line>
+                <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+              </svg>
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <!-- Right Panel: Itinerary Dashboard Display -->
+      <section class="itinerary-panel glass-card">
+        <!-- Empty State View -->
+        <div class="empty-state-container" id="empty-state">
+          <div class="empty-illustration">🗺️</div>
+          <h2>Interactive Trip Dashboard</h2>
+          <p>Once you finish planning your trip with JourneyGenie, your complete day-by-day itinerary, dynamic budget breakdowns, hotel recommendations, and packing lists will populate here in real-time!</p>
+          <div class="demo-destinations">
+            <span>Or try offline datasets:</span>
+            <div class="demo-dest-buttons">
+              <button class="demo-chip" data-dest="Darjeeling, West Bengal">Darjeeling 🏔️</button>
+              <button class="demo-chip" data-dest="Kashmir Valley">Kashmir 🌸</button>
+              <button class="demo-chip" data-dest="Ladakh (Leh & Nubra)">Ladakh 🌌</button>
+              <button class="demo-chip" data-dest="Kolkata, West Bengal">Kolkata 🎨</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Main Dashboard View (Hidden by default) -->
+        <div class="dashboard-view hidden" id="dashboard-view">
+          <div class="dashboard-action-bar">
+            <h2>🌍 Trip Itinerary Dashboard</h2>
+            <div class="dashboard-buttons">
+              <button id="print-itinerary-btn" class="primary-btn btn-sm">
+                🖨️ Print Itinerary / Save PDF
+              </button>
+            </div>
+          </div>
+
+          <!-- Summary Grid -->
+          <div class="dashboard-summary-grid">
+            <div class="summary-card">
+              <span class="lbl">Destination</span>
+              <strong id="sum-dest">TBD</strong>
+            </div>
+            <div class="summary-card">
+              <span class="lbl">Duration</span>
+              <strong id="sum-days">TBD</strong>
+            </div>
+            <div class="summary-card">
+              <span class="lbl">Dates</span>
+              <strong id="sum-dates">TBD</strong>
+            </div>
+            <div class="summary-card">
+              <span class="lbl">Travelers</span>
+              <strong id="sum-travelers">TBD</strong>
+            </div>
+            <div class="summary-card">
+              <span class="lbl">Budget Tier</span>
+              <strong id="sum-style">TBD</strong>
+            </div>
+          </div>
+
+          <!-- Split Dashboard Content -->
+          <div class="dashboard-split-content">
+            <!-- Left Side: Itinerary Timeline -->
+            <div class="dashboard-left-col">
+              <div class="itinerary-days-container" id="day-by-day-list">
+                <!-- Javascript will inject day cards -->
+              </div>
+            </div>
+
+            <!-- Right Side: Budget Breakdown, Hotels, Local Guides -->
+            <div class="dashboard-right-col">
+              <!-- Budget Chart Card -->
+              <div class="panel-card budget-card">
+                <h3>Estimated Budget Breakdown</h3>
+                <div class="budget-chart-rows" id="budget-breakdown-list">
+                  <!-- Javascript fills budget bars -->
+                </div>
+                <div class="total-budget-row">
+                  <span>Total Est. Spend:</span>
+                  <span class="price-highlight" id="sum-total-budget">₹0</span>
+                </div>
+              </div>
+
+              <!-- Accommodations Card -->
+              <div class="panel-card collapsible-card">
+                <h3>🏨 Recommended Accommodations</h3>
+                <div class="card-list" id="hotels-suggestions-list">
+                  <!-- Hotels list -->
+                </div>
+              </div>
+
+              <!-- Transit Plan Card -->
+              <div class="panel-card collapsible-card">
+                <h3>🚗 Local Transport Guide</h3>
+                <div class="rich-desc" id="transport-plan-desc">
+                  <!-- Transport detail -->
+                </div>
+              </div>
+
+              <!-- Cuisine Card -->
+              <div class="panel-card collapsible-card">
+                <h3>🍲 Culinary Specialties & Dining</h3>
+                <div class="rich-desc" id="food-recommend-desc">
+                  <!-- Local food spots -->
+                </div>
+              </div>
+
+              <!-- Attractions Card -->
+              <div class="panel-card collapsible-card">
+                <h3>🌟 Major Attractions</h3>
+                <div class="card-list" id="key-attractions-list">
+                  <!-- Sights list -->
+                </div>
+              </div>
+
+              <!-- Hidden Gems Card -->
+              <div class="panel-card collapsible-card">
+                <h3>💎 Hidden Gems</h3>
+                <div class="card-list" id="hidden-gems-list">
+                  <!-- Gems list -->
+                </div>
+              </div>
+
+              <!-- Packing Checklist Card -->
+              <div class="panel-card collapsible-card">
+                <h3>🎒 Weather Packing Checklist</h3>
+                <div class="checklist-grid" id="packing-checklist-elements">
+                  <!-- Packing list checkboxes -->
+                </div>
+              </div>
+
+              <!-- Travel Tips Guide Card -->
+              <div class="panel-card collapsible-card">
+                <h3>💡 Local Safety & Travel Guide</h3>
+                <div class="rich-desc" id="travel-tips-desc">
+                  <!-- Tips and numbers -->
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <!-- Javascript Logic -->
+  <script src="app.js"></script>
+</body>
+</html>

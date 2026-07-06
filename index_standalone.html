@@ -1,0 +1,3017 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="JourneyGenie AI - Conversational travel planner agent chatbot. Plan trips with local databases and live Gemini AI content.">
+  <title>JourneyGenie AI | Conversational Travel Planner Agent</title>
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <!-- Stylesheet -->
+  <style>
+/* ==========================================================================
+   JOURNEYGENIE CSS STYLING SYSTEM - LAYOUTS, BUBBLES, AND PRINT STYLES
+   ========================================================================== */
+
+:root {
+  --font-title: 'Outfit', -apple-system, sans-serif;
+  --font-body: 'Plus Jakarta Sans', sans-serif;
+  
+  --transition-normal: 0.25s ease;
+  --transition-spring: 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+  --border-radius-lg: 24px;
+  --border-radius-md: 16px;
+  --border-radius-sm: 10px;
+
+  /* Theme variables - Dark Mode (Default) */
+  --bg-gradient: radial-gradient(circle at 50% 50%, #0d121f 0%, #04060b 100%);
+  --panel-bg: rgba(18, 25, 41, 0.65);
+  --panel-border: rgba(255, 255, 255, 0.08);
+  --text-primary: #f8fafc;
+  --text-secondary: #94a3b8;
+  --text-muted: #475569;
+  
+  --primary-color: #6366f1;
+  --primary-hover: #4f46e5;
+  --secondary-bg: rgba(255, 255, 255, 0.05);
+  --secondary-hover: rgba(255, 255, 255, 0.09);
+  --accent-color: #a855f7;
+  --success-color: #10b981;
+  --error-color: #f43f5e;
+  
+  --gradient-start: #6366f1;
+  --gradient-end: #8b5cf6;
+  --shadow-card: 0 12px 30px -10px rgba(0, 0, 0, 0.4);
+  --shadow-glow: 0 0 30px -10px rgba(99, 102, 241, 0.15);
+  --glass-blur: blur(16px);
+  --blob-opacity: 0.15;
+}
+
+[data-theme="light"] {
+  /* Theme variables - Light Mode */
+  --bg-gradient: radial-gradient(circle at 50% 50%, #f8fafc 0%, #e2e8f0 100%);
+  --panel-bg: rgba(255, 255, 255, 0.8);
+  --panel-border: rgba(99, 102, 241, 0.12);
+  --text-primary: #0f172a;
+  --text-secondary: #475569;
+  --text-muted: #94a3b8;
+  
+  --primary-color: #4f46e5;
+  --primary-hover: #3730a3;
+  --secondary-bg: rgba(99, 102, 241, 0.05);
+  --secondary-hover: rgba(99, 102, 241, 0.1);
+  --accent-color: #7c3aed;
+  --success-color: #059669;
+  --error-color: #e11d48;
+  
+  --gradient-start: #4f46e5;
+  --gradient-end: #7c3aed;
+  --shadow-card: 0 12px 30px -10px rgba(99, 102, 241, 0.08);
+  --shadow-glow: 0 0 30px -10px rgba(99, 102, 241, 0.05);
+  --glass-blur: blur(20px);
+  --blob-opacity: 0.08;
+}
+
+/* ==========================================================================
+   RESET & FOUNDATIONS
+   ========================================================================== */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: var(--font-body);
+  background: var(--bg-gradient);
+  color: var(--text-primary);
+  min-height: 100vh;
+  overflow-x: hidden;
+  display: flex;
+  justify-content: center;
+  transition: background 0.3s ease;
+}
+
+/* Background Animated Blobs */
+.blob-bg {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: -1;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.blob {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(80px);
+  opacity: var(--blob-opacity);
+  transition: opacity 0.3s ease;
+  animation: float-blobs 25s infinite alternate ease-in-out;
+}
+
+.blob-1 {
+  width: 500px;
+  height: 500px;
+  background: var(--primary-color);
+  top: -10%;
+  left: -10%;
+}
+
+.blob-2 {
+  width: 600px;
+  height: 600px;
+  background: var(--accent-color);
+  bottom: -15%;
+  right: -10%;
+  animation-delay: -5s;
+}
+
+.blob-3 {
+  width: 400px;
+  height: 400px;
+  background: #0ea5e9;
+  top: 40%;
+  left: 50%;
+  animation-delay: -10s;
+}
+
+@keyframes float-blobs {
+  0% { transform: translate(0, 0) scale(1); }
+  50% { transform: translate(80px, -60px) scale(1.1); }
+  100% { transform: translate(-60px, 80px) scale(0.9); }
+}
+
+/* Common Glassmorphic Card */
+.glass-card {
+  background: var(--panel-bg);
+  border: 1px solid var(--panel-border);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  border-radius: var(--border-radius-lg);
+  box-shadow: var(--shadow-card);
+  transition: border var(--transition-normal), background var(--transition-normal);
+}
+
+/* Buttons */
+button {
+  font-family: var(--font-title);
+  font-weight: 600;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  transition: all var(--transition-normal);
+}
+
+.primary-btn {
+  background: linear-gradient(135deg, var(--gradient-start) 0%, var(--gradient-end) 100%);
+  color: #ffffff;
+  padding: 12px 24px;
+  border-radius: var(--border-radius-sm);
+  box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
+}
+
+.primary-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(99, 102, 241, 0.45);
+  background: linear-gradient(135deg, var(--primary-hover) 0%, var(--gradient-end) 100%);
+}
+
+.primary-btn.btn-sm {
+  padding: 8px 16px;
+  font-size: 0.85rem;
+}
+
+.quit-btn {
+  background: var(--error-color);
+  color: #ffffff;
+  padding: 12px 24px;
+  border-radius: var(--border-radius-sm);
+}
+
+.quit-btn:hover {
+  background: #e11d48;
+  transform: translateY(-2px);
+}
+
+.quit-btn.btn-sm {
+  padding: 8px 16px;
+  font-size: 0.85rem;
+}
+
+/* ==========================================================================
+   APP CONTAINER & HEADER
+   ========================================================================== */
+.app-container {
+  width: 100%;
+  max-width: 1300px;
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  height: 100vh;
+}
+
+.app-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 0;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-family: var(--font-title);
+  font-size: 1.5rem;
+  font-weight: 800;
+  letter-spacing: -0.5px;
+}
+
+.logo-icon {
+  width: 28px;
+  height: 28px;
+  color: var(--primary-color);
+  filter: drop-shadow(0 2px 8px rgba(99, 102, 241, 0.4));
+}
+
+.badge-tag {
+  font-size: 0.75rem;
+  background: rgba(99, 102, 241, 0.15);
+  color: var(--primary-color);
+  padding: 2px 8px;
+  border-radius: 20px;
+  border: 1px solid rgba(99, 102, 241, 0.25);
+  vertical-align: middle;
+  margin-left: 6px;
+}
+
+.header-controls {
+  display: flex;
+  gap: 10px;
+}
+
+.control-btn {
+  background: var(--secondary-bg);
+  border: 1px solid var(--panel-border);
+  color: var(--text-primary);
+  width: auto;
+  min-width: 42px;
+  height: 42px;
+  padding: 0 16px;
+  border-radius: var(--border-radius-sm);
+}
+
+.control-btn:hover {
+  background: var(--secondary-hover);
+  border-color: var(--primary-color);
+}
+
+.control-btn svg {
+  width: 20px;
+  height: 20px;
+  stroke: currentColor;
+}
+
+/* ==========================================================================
+   API CONFIGURATION PANEL
+   ========================================================================== */
+.api-config-panel {
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  animation: slide-down 0.3s ease-out forwards;
+}
+
+@keyframes slide-down {
+  from { opacity: 0; transform: translateY(-10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.api-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.api-header h4 {
+  font-family: var(--font-title);
+  font-size: 1.05rem;
+  font-weight: 700;
+}
+
+.status-badge {
+  font-size: 0.78rem;
+  font-weight: 700;
+  padding: 4px 10px;
+  border-radius: 20px;
+  letter-spacing: 0.2px;
+}
+
+.status-badge.offline {
+  background: rgba(71, 85, 105, 0.2);
+  color: var(--text-secondary);
+  border: 1px solid rgba(71, 85, 105, 0.3);
+}
+
+.status-badge.live {
+  background: rgba(16, 185, 129, 0.15);
+  color: var(--success-color);
+  border: 1px solid rgba(16, 185, 129, 0.3);
+}
+
+.api-desc {
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  line-height: 1.5;
+}
+
+.api-desc a {
+  color: var(--primary-color);
+  text-decoration: none;
+}
+
+.api-desc a:hover {
+  text-decoration: underline;
+}
+
+.api-input-group {
+  display: flex;
+  gap: 12px;
+}
+
+.api-input-group input {
+  flex: 1;
+  background: rgba(0, 0, 0, 0.2);
+  border: 1px solid var(--panel-border);
+  padding: 10px 14px;
+  border-radius: var(--border-radius-sm);
+  color: var(--text-primary);
+  font-family: var(--font-body);
+  outline: none;
+  font-size: 0.9rem;
+}
+
+.api-input-group input:focus {
+  border-color: var(--primary-color);
+}
+
+/* ==========================================================================
+   MAIN LAYOUT & CHAT PANEL
+   ========================================================================== */
+.main-layout {
+  display: flex;
+  gap: 20px;
+  height: calc(100vh - 120px);
+}
+
+.chat-panel {
+  flex: 1 1 420px;
+  max-width: 480px;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  height: 100%;
+}
+
+.chat-panel-header {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 16px 20px;
+  border-bottom: 1px solid var(--panel-border);
+}
+
+.agent-avatar {
+  font-size: 1.8rem;
+  background: rgba(99, 102, 241, 0.12);
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 10px rgba(99, 102, 241, 0.15);
+}
+
+.agent-info h3 {
+  font-family: var(--font-title);
+  font-size: 1.05rem;
+  font-weight: 700;
+}
+
+.agent-status {
+  font-size: 0.78rem;
+  color: var(--success-color);
+  font-weight: 500;
+}
+
+/* Chat History */
+.chat-history {
+  flex: 1;
+  padding: 20px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  scroll-behavior: smooth;
+}
+
+.chat-bubble {
+  display: flex;
+  flex-direction: column;
+  max-width: 85%;
+  animation: bubble-fade 0.25s ease-out forwards;
+}
+
+@keyframes bubble-fade {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.chat-bubble.bot {
+  align-self: flex-start;
+  align-items: flex-start;
+}
+
+.chat-bubble.user {
+  align-self: flex-end;
+  align-items: flex-end;
+}
+
+.msg-text {
+  padding: 12px 16px;
+  border-radius: var(--border-radius-md);
+  font-size: 0.92rem;
+  line-height: 1.5;
+}
+
+.chat-bubble.bot .msg-text {
+  background: var(--secondary-bg);
+  border: 1px solid var(--panel-border);
+  color: var(--text-primary);
+  border-radius: 18px 18px 18px 4px;
+}
+
+.chat-bubble.user .msg-text {
+  background: var(--primary-color);
+  color: #ffffff;
+  border-radius: 18px 18px 4px 18px;
+  box-shadow: 0 4px 12px rgba(99, 102, 241, 0.2);
+}
+
+/* Chat Loader Dot animation */
+.typing-indicator {
+  display: flex;
+  gap: 6px;
+  padding: 8px 12px;
+}
+
+.typing-dot {
+  width: 8px;
+  height: 8px;
+  background: var(--text-secondary);
+  border-radius: 50%;
+  animation: typing-bounce 1.4s infinite ease-in-out both;
+}
+
+.typing-dot:nth-child(2) { animation-delay: 0.2s; }
+.typing-dot:nth-child(3) { animation-delay: 0.4s; }
+
+@keyframes typing-bounce {
+  0%, 80%, 100% { transform: scale(0); }
+  40% { transform: scale(1); }
+}
+
+/* Suggestion Chips */
+.chat-footer {
+  padding: 16px 20px;
+  border-top: 1px solid var(--panel-border);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.suggestion-chips-container {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  max-height: 80px;
+  overflow-y: auto;
+}
+
+.suggestion-chip {
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid var(--panel-border);
+  color: var(--text-secondary);
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  font-weight: 500;
+}
+
+.suggestion-chip:hover {
+  background: var(--secondary-hover);
+  color: var(--text-primary);
+  border-color: var(--primary-color);
+}
+
+/* Input Row */
+.chat-input-row {
+  display: flex;
+  gap: 10px;
+}
+
+.chat-input-row input {
+  flex: 1;
+  background: rgba(0, 0, 0, 0.25);
+  border: 1px solid var(--panel-border);
+  padding: 14px 18px;
+  border-radius: var(--border-radius-sm);
+  color: var(--text-primary);
+  font-family: var(--font-body);
+  font-size: 0.95rem;
+  outline: none;
+  transition: border-color var(--transition-normal);
+}
+
+.chat-input-row input:focus {
+  border-color: var(--primary-color);
+}
+
+.chat-input-row button {
+  width: 48px;
+  height: 48px;
+  flex-shrink: 0;
+  border-radius: var(--border-radius-sm);
+}
+
+.send-icon {
+  width: 20px;
+  height: 20px;
+}
+
+/* ==========================================================================
+   RIGHT PANEL: ITINERARY DASHBOARD
+   ========================================================================== */
+.itinerary-panel {
+  flex: 2 1 600px;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  height: 100%;
+}
+
+/* Empty State */
+.empty-state-container {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 40px;
+  text-align: center;
+}
+
+.empty-illustration {
+  font-size: 4rem;
+  margin-bottom: 20px;
+  animation: suitcase-wobble 4s infinite ease-in-out;
+}
+
+@keyframes suitcase-wobble {
+  0%, 100% { transform: rotate(0deg); }
+  50% { transform: rotate(8deg); }
+}
+
+.empty-state-container h2 {
+  font-family: var(--font-title);
+  font-weight: 700;
+  font-size: 1.6rem;
+  margin-bottom: 12px;
+}
+
+.empty-state-container p {
+  color: var(--text-secondary);
+  font-size: 0.95rem;
+  line-height: 1.6;
+  max-width: 440px;
+  margin-bottom: 30px;
+}
+
+.demo-destinations {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.demo-destinations span {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  font-weight: 600;
+}
+
+.demo-dest-buttons {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.demo-chip {
+  background: var(--secondary-bg);
+  border: 1px solid var(--panel-border);
+  color: var(--text-primary);
+  padding: 8px 16px;
+  border-radius: 20px;
+  font-size: 0.85rem;
+}
+
+.demo-chip:hover {
+  background: var(--secondary-hover);
+  border-color: var(--primary-color);
+  transform: translateY(-1px);
+}
+
+/* Main Dashboard View */
+.dashboard-view {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  height: 100%;
+  animation: dashboard-reveal 0.3s ease-out forwards;
+}
+
+@keyframes dashboard-reveal {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.dashboard-action-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 24px;
+  border-bottom: 1px solid var(--panel-border);
+}
+
+.dashboard-action-bar h2 {
+  font-family: var(--font-title);
+  font-size: 1.25rem;
+  font-weight: 800;
+}
+
+/* Summary Grid */
+.dashboard-summary-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+  gap: 12px;
+  padding: 16px 24px;
+  border-bottom: 1px solid var(--panel-border);
+  background: rgba(0, 0, 0, 0.08);
+}
+
+.summary-card {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(255, 255, 255, 0.04);
+  padding: 10px 14px;
+  border-radius: var(--border-radius-sm);
+}
+
+.summary-card .lbl {
+  font-size: 0.72rem;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+}
+
+.summary-card strong {
+  font-family: var(--font-title);
+  font-size: 0.95rem;
+  color: var(--text-primary);
+}
+
+/* Split Content Scroll */
+.dashboard-split-content {
+  flex: 1;
+  display: flex;
+  overflow: hidden;
+}
+
+.dashboard-left-col {
+  flex: 1.2;
+  overflow-y: auto;
+  padding: 24px;
+  border-right: 1px solid var(--panel-border);
+}
+
+.dashboard-right-col {
+  flex: 0.8;
+  overflow-y: auto;
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+/* Panel Card */
+.panel-card {
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid var(--panel-border);
+  padding: 18px;
+  border-radius: var(--border-radius-md);
+}
+
+.panel-card h3 {
+  font-family: var(--font-title);
+  font-size: 1rem;
+  font-weight: 700;
+  margin-bottom: 14px;
+  color: var(--text-primary);
+}
+
+/* Timeline/Days Cards */
+.day-block {
+  border-left: 2px solid var(--primary-color);
+  padding-left: 20px;
+  position: relative;
+  margin-bottom: 30px;
+}
+
+.day-block::before {
+  content: "";
+  position: absolute;
+  left: -7px;
+  top: 4px;
+  width: 12px;
+  height: 12px;
+  background: var(--primary-color);
+  border-radius: 50%;
+  box-shadow: 0 0 10px var(--primary-color);
+}
+
+.day-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 14px;
+}
+
+.day-header h3 {
+  font-family: var(--font-title);
+  font-size: 1.1rem;
+  font-weight: 700;
+}
+
+.day-cost-tag {
+  background: rgba(99, 102, 241, 0.12);
+  border: 1px solid rgba(99, 102, 241, 0.2);
+  color: var(--primary-color);
+  font-size: 0.78rem;
+  font-weight: 700;
+  padding: 3px 8px;
+  border-radius: 6px;
+}
+
+.day-timeline {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.time-slot {
+  display: flex;
+  gap: 12px;
+}
+
+.time-label {
+  font-size: 0.72rem;
+  font-weight: 800;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid var(--panel-border);
+  padding: 4px 8px;
+  border-radius: 6px;
+  align-self: flex-start;
+  min-width: 76px;
+  text-align: center;
+}
+
+.slot-detail {
+  flex: 1;
+}
+
+.slot-detail h4 {
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: 2px;
+}
+
+.slot-detail p {
+  font-size: 0.88rem;
+  color: var(--text-secondary);
+  line-height: 1.5;
+}
+
+.day-meta-footer {
+  margin-top: 14px;
+  padding-top: 10px;
+  border-top: 1px dashed var(--panel-border);
+  display: flex;
+  gap: 16px;
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  font-weight: 500;
+}
+
+/* Budget Cards */
+.budget-chart-rows {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.budget-chart-item {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.budget-chart-lbl {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.82rem;
+}
+
+.budget-bar-track {
+  width: 100%;
+  height: 6px;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.budget-bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--gradient-start), var(--gradient-end));
+  width: 0;
+  border-radius: 4px;
+  transition: width 0.8s ease-out;
+}
+
+.total-budget-row {
+  margin-top: 16px;
+  padding-top: 12px;
+  border-top: 1px solid var(--panel-border);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.total-budget-row span {
+  font-weight: 700;
+  font-size: 0.95rem;
+}
+
+.price-highlight {
+  font-family: var(--font-title);
+  font-size: 1.25rem;
+  font-weight: 800;
+  color: var(--primary-color);
+  text-shadow: var(--shadow-glow);
+}
+
+/* List Item Card */
+.list-item-card {
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid var(--panel-border);
+  padding: 12px 14px;
+  border-radius: var(--border-radius-sm);
+  margin-bottom: 8px;
+}
+
+.list-item-card h4 {
+  font-size: 0.9rem;
+  font-weight: 700;
+  margin-bottom: 4px;
+}
+
+.list-item-card p {
+  font-size: 0.82rem;
+  color: var(--text-secondary);
+  line-height: 1.4;
+}
+
+.card-tag {
+  font-size: 0.72rem;
+  font-weight: 700;
+  background: rgba(255, 255, 255, 0.04);
+  padding: 2px 6px;
+  border-radius: 4px;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.rich-desc {
+  font-size: 0.88rem;
+  color: var(--text-secondary);
+  line-height: 1.6;
+}
+
+/* Checklist grid */
+.checklist-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.checklist-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 0.85rem;
+  cursor: pointer;
+}
+
+.checklist-item input[type="checkbox"] {
+  width: 15px;
+  height: 15px;
+  accent-color: var(--primary-color);
+  cursor: pointer;
+}
+
+.checklist-item.checked span {
+  text-decoration: line-through;
+  color: var(--text-muted);
+}
+
+/* Utility hidden */
+.hidden { display: none !important; }
+
+/* Scrollbar styling */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+}
+::-webkit-scrollbar-thumb {
+  background: var(--panel-border);
+  border-radius: 8px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--text-secondary);
+}
+
+/* ==========================================================================
+   RESPONSIVENESS (MEDIA QUERIES)
+   ========================================================================== */
+@media (max-width: 1024px) {
+  .app-container {
+    height: auto;
+    padding: 16px;
+  }
+  
+  .main-layout {
+    flex-direction: column;
+    height: auto;
+  }
+  
+  .chat-panel {
+    max-width: 100%;
+    height: 500px;
+  }
+
+  .itinerary-panel {
+    height: auto;
+    min-height: 600px;
+  }
+
+  .dashboard-split-content {
+    flex-direction: column;
+    overflow: visible;
+  }
+
+  .dashboard-left-col {
+    border-right: none;
+    border-bottom: 1px solid var(--panel-border);
+    overflow-y: visible;
+  }
+
+  .dashboard-right-col {
+    overflow-y: visible;
+  }
+}
+
+/* ==========================================================================
+   PRINT LAYOUT
+   ========================================================================== */
+@media print {
+  body {
+    background: #ffffff !important;
+    color: #000000 !important;
+    font-size: 11pt !important;
+  }
+
+  .blob-bg,
+  .app-header,
+  .api-config-panel,
+  .chat-panel,
+  .dashboard-action-bar,
+  #print-itinerary-btn,
+  .demo-destinations,
+  ::-webkit-scrollbar {
+    display: none !important;
+  }
+
+  .app-container {
+    padding: 0 !important;
+    margin: 0 !important;
+    max-width: 100% !important;
+  }
+
+  .itinerary-panel {
+    border: none !important;
+    box-shadow: none !important;
+    background: transparent !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+    overflow: visible !important;
+  }
+
+  .dashboard-view {
+    overflow: visible !important;
+  }
+
+  .dashboard-split-content {
+    display: block !important;
+    overflow: visible !important;
+  }
+
+  .dashboard-left-col {
+    border-right: none !important;
+    padding: 0 !important;
+    margin-bottom: 30px;
+    overflow: visible !important;
+  }
+
+  .dashboard-right-col {
+    padding: 0 !important;
+    display: block !important;
+    overflow: visible !important;
+  }
+
+  .panel-card {
+    border: 1px solid #cbd5e1 !important;
+    background: transparent !important;
+    box-shadow: none !important;
+    page-break-inside: avoid;
+    margin-bottom: 20px;
+  }
+
+  .day-block {
+    border-left: 2px solid #000000 !important;
+    page-break-inside: avoid;
+  }
+
+  .day-block::before {
+    background: #000000 !important;
+    box-shadow: none !important;
+  }
+
+  .time-label {
+    background: #f1f5f9 !important;
+    border: 1px solid #cbd5e1 !important;
+    color: #000000 !important;
+  }
+
+  h1, h2, h3, h4, strong {
+    color: #000000 !important;
+  }
+
+  .price-highlight {
+    color: #000000 !important;
+  }
+
+  .budget-bar-track {
+    border: 1px solid #000000 !important;
+    background: #ffffff !important;
+  }
+
+  .budget-bar-fill {
+    background: #000000 !important;
+  }
+}
+
+</style>
+</head>
+<body>
+  <!-- Background Blobs -->
+  <div class="blob-bg">
+    <div class="blob blob-1"></div>
+    <div class="blob blob-2"></div>
+    <div class="blob blob-3"></div>
+  </div>
+
+  <div class="app-container">
+    <!-- Header -->
+    <header class="app-header">
+      <div class="logo">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="logo-icon">
+          <path d="M22 2L11 13"></path>
+          <path d="M22 2L15 22L11 13L2 9L22 2Z"></path>
+        </svg>
+        <span>JourneyGenie <span class="badge-tag">AI Agent</span></span>
+      </div>
+      
+      <div class="header-controls">
+        <!-- API Config Toggle Button -->
+        <button id="api-toggle-btn" class="control-btn" style="display: none;" title="AI Settings">
+          🔑 <span class="btn-text">AI Settings</span>
+        </button>
+        <!-- Theme Toggle -->
+        <button id="theme-toggle" class="control-btn" aria-label="Toggle Theme" title="Toggle Theme">
+          <svg id="sun-icon" class="hidden" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="5"></circle>
+            <line x1="12" y1="1" x2="12" y2="3"></line>
+            <line x1="12" y1="21" x2="12" y2="23"></line>
+            <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+            <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+            <line x1="1" y1="12" x2="3" y2="12"></line>
+            <line x1="21" y1="12" x2="23" y2="12"></line>
+            <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+            <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+          </svg>
+          <svg id="moon-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+          </svg>
+        </button>
+      </div>
+    </header>
+
+    <!-- API Config Panel -->
+    <div id="api-config-panel" class="api-config-panel hidden glass-card" style="display: none;">
+      <div class="api-header">
+        <h4>🔑 Google Gemini AI API Configuration</h4>
+        <span id="api-status-badge" class="status-badge offline">Offline Demo Mode</span>
+      </div>
+      <p class="api-desc">Provide your Gemini API key from <a href="https://aistudio.google.com/" target="_blank" rel="noopener">Google AI Studio</a> to enable live conversational generation. Leave blank to run offline using our local destination datasets.</p>
+      <div class="api-input-group">
+        <input type="password" id="gemini-api-key" placeholder="Paste your API key here..." aria-label="Gemini API Key">
+        <button id="save-key-btn" class="primary-btn btn-sm">Save Key</button>
+        <button id="clear-key-btn" class="quit-btn btn-sm hidden">Clear</button>
+      </div>
+    </div>
+
+    <!-- Main Layout Container -->
+    <main class="main-layout">
+      <!-- Left Panel: Chatbot Interface -->
+      <section class="chat-panel glass-card">
+        <div class="chat-panel-header">
+          <div class="agent-avatar">🧞</div>
+          <div class="agent-info" style="flex: 1;">
+            <h3>JourneyGenie Assistant</h3>
+            <span class="agent-status" id="connection-status">Online (Local DB)</span>
+          </div>
+          <button id="reset-chat-btn" class="control-btn btn-sm" title="Clear Chat & Reset" style="padding: 0 10px; height: 32px; font-size: 0.8rem;">
+            🗑️ Reset
+          </button>
+        </div>
+
+        <!-- Chat Conversation Log -->
+        <div class="chat-history" id="chat-history">
+          <!-- Initial bot message will be dynamically injected -->
+        </div>
+
+        <!-- Chat Controls and Suggestions -->
+        <div class="chat-footer">
+          <div class="suggestion-chips-container" id="suggestion-chips">
+            <!-- Dynamic suggestion prompts -->
+          </div>
+          <div class="chat-input-row">
+            <input type="text" id="chat-user-input" placeholder="Say hi or type a destination to start..." aria-label="Chat input field">
+            <button id="chat-send-btn" class="primary-btn" aria-label="Send Message">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="send-icon">
+                <line x1="22" y1="2" x2="11" y2="13"></line>
+                <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+              </svg>
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <!-- Right Panel: Itinerary Dashboard Display -->
+      <section class="itinerary-panel glass-card">
+        <!-- Empty State View -->
+        <div class="empty-state-container" id="empty-state">
+          <div class="empty-illustration">🗺️</div>
+          <h2>Interactive Trip Dashboard</h2>
+          <p>Once you finish planning your trip with JourneyGenie, your complete day-by-day itinerary, dynamic budget breakdowns, hotel recommendations, and packing lists will populate here in real-time!</p>
+          <div class="demo-destinations">
+            <span>Or try offline datasets:</span>
+            <div class="demo-dest-buttons">
+              <button class="demo-chip" data-dest="Darjeeling, West Bengal">Darjeeling 🏔️</button>
+              <button class="demo-chip" data-dest="Kashmir Valley">Kashmir 🌸</button>
+              <button class="demo-chip" data-dest="Ladakh (Leh & Nubra)">Ladakh 🌌</button>
+              <button class="demo-chip" data-dest="Kolkata, West Bengal">Kolkata 🎨</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Main Dashboard View (Hidden by default) -->
+        <div class="dashboard-view hidden" id="dashboard-view">
+          <div class="dashboard-action-bar">
+            <h2>🌍 Trip Itinerary Dashboard</h2>
+            <div class="dashboard-buttons">
+              <button id="print-itinerary-btn" class="primary-btn btn-sm">
+                🖨️ Print Itinerary / Save PDF
+              </button>
+            </div>
+          </div>
+
+          <!-- Summary Grid -->
+          <div class="dashboard-summary-grid">
+            <div class="summary-card">
+              <span class="lbl">Destination</span>
+              <strong id="sum-dest">TBD</strong>
+            </div>
+            <div class="summary-card">
+              <span class="lbl">Duration</span>
+              <strong id="sum-days">TBD</strong>
+            </div>
+            <div class="summary-card">
+              <span class="lbl">Dates</span>
+              <strong id="sum-dates">TBD</strong>
+            </div>
+            <div class="summary-card">
+              <span class="lbl">Travelers</span>
+              <strong id="sum-travelers">TBD</strong>
+            </div>
+            <div class="summary-card">
+              <span class="lbl">Budget Tier</span>
+              <strong id="sum-style">TBD</strong>
+            </div>
+          </div>
+
+          <!-- Split Dashboard Content -->
+          <div class="dashboard-split-content">
+            <!-- Left Side: Itinerary Timeline -->
+            <div class="dashboard-left-col">
+              <div class="itinerary-days-container" id="day-by-day-list">
+                <!-- Javascript will inject day cards -->
+              </div>
+            </div>
+
+            <!-- Right Side: Budget Breakdown, Hotels, Local Guides -->
+            <div class="dashboard-right-col">
+              <!-- Budget Chart Card -->
+              <div class="panel-card budget-card">
+                <h3>Estimated Budget Breakdown</h3>
+                <div class="budget-chart-rows" id="budget-breakdown-list">
+                  <!-- Javascript fills budget bars -->
+                </div>
+                <div class="total-budget-row">
+                  <span>Total Est. Spend:</span>
+                  <span class="price-highlight" id="sum-total-budget">₹0</span>
+                </div>
+              </div>
+
+              <!-- Accommodations Card -->
+              <div class="panel-card collapsible-card">
+                <h3>🏨 Recommended Accommodations</h3>
+                <div class="card-list" id="hotels-suggestions-list">
+                  <!-- Hotels list -->
+                </div>
+              </div>
+
+              <!-- Transit Plan Card -->
+              <div class="panel-card collapsible-card">
+                <h3>🚗 Local Transport Guide</h3>
+                <div class="rich-desc" id="transport-plan-desc">
+                  <!-- Transport detail -->
+                </div>
+              </div>
+
+              <!-- Cuisine Card -->
+              <div class="panel-card collapsible-card">
+                <h3>🍲 Culinary Specialties & Dining</h3>
+                <div class="rich-desc" id="food-recommend-desc">
+                  <!-- Local food spots -->
+                </div>
+              </div>
+
+              <!-- Attractions Card -->
+              <div class="panel-card collapsible-card">
+                <h3>🌟 Major Attractions</h3>
+                <div class="card-list" id="key-attractions-list">
+                  <!-- Sights list -->
+                </div>
+              </div>
+
+              <!-- Hidden Gems Card -->
+              <div class="panel-card collapsible-card">
+                <h3>💎 Hidden Gems</h3>
+                <div class="card-list" id="hidden-gems-list">
+                  <!-- Gems list -->
+                </div>
+              </div>
+
+              <!-- Packing Checklist Card -->
+              <div class="panel-card collapsible-card">
+                <h3>🎒 Weather Packing Checklist</h3>
+                <div class="checklist-grid" id="packing-checklist-elements">
+                  <!-- Packing list checkboxes -->
+                </div>
+              </div>
+
+              <!-- Travel Tips Guide Card -->
+              <div class="panel-card collapsible-card">
+                <h3>💡 Local Safety & Travel Guide</h3>
+                <div class="rich-desc" id="travel-tips-desc">
+                  <!-- Tips and numbers -->
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <!-- Javascript Logic -->
+  <script>
+/* ==========================================================================
+   JOURNEYGENIE APPLICATION CONTROLLER - CONVERSATIONAL TRAVEL PLANNER AGENT
+   ========================================================================== */
+
+// 1. REGIONAL LOCAL DATABASE (12 destinations, detailed 10-day structures)
+const TRAVEL_DATASET = {
+  "Meghalaya (Shillong & Cherrapunji)": {
+    region: "India North-East",
+    currency: "INR (Indian Rupee)",
+    language: "Khasi, English, Garo",
+    localEtiquette: "Respect traditional matrilineal customs; remove shoes before entering sacred homes; ask permission before photos.",
+    safetyTips: "Mountain roads can get foggy; travel before dark. Carry rain gear.",
+    emergencyContacts: "Police: 100, Ambulance: 108, Tourism: +91-364-2222707",
+    simInfo: "Jio & Airtel have best signals in Shillong; signals weaken in deep valleys.",
+    accommodations: {
+      "Backpacking": { name: "Shillong Cozy Hostel", price: "₹800/night", pros: "Social dorms, central Police Bazar." },
+      "Budget": { name: "Mawsmai Valley Homestay", price: "₹2,200/night", pros: "Local Khasi meals, scenic mountain views." },
+      "Mid-range": { name: "Polo Towers Shillong", price: "₹7,500/night", pros: "Comfortable rooms, multi-cuisine restaurant." },
+      "Luxury": { name: "Ri Kynjai Resort", price: "₹22,000/night", pros: "Lake views, premium spa, heritage design." }
+    },
+    transport: { desc: "Private taxi or driver is best. Hilly winding roads make self-driving hard." },
+    food: { local: "Jadoh (spiced rice), Dohkhlieh, fermented soy, pineapples.", restaurants: "Dylan's Cafe, Cafe Cherrapunji, Jiva Grill." },
+    attractions: [
+      { name: "Double Decker Root Bridge", why: "Living root bridge in Nongriat", dur: "5 hours", fee: "₹50", time: "Morning" },
+      { name: "Nohkalikai Falls & Caves", why: "Highest plunge waterfall in India", dur: "2 hours", fee: "₹40", time: "Noon" }
+    ],
+    hiddenGems: [{ name: "Laitlum Canyons", desc: "Mist-covered canyon trails." }],
+    packing: ["Raincoat", "Sturdy waterproof boots", "Warm fleece jacket"],
+    itineraryDays: [
+      { day: 1, title: "Guwahati to Shillong", activities: { morning: "Arrive at Guwahati Airport, meet your private driver.", afternoon: "Drive to Shillong, stop at gorgeous Umiam Lake.", evening: "Check in to hotel, stroll Police Bazar for local goods." } },
+      { day: 2, title: "Laitlum Canyons & Shillong Sights", activities: { morning: "Drive to Laitlum Canyons for scenic morning mist views.", afternoon: "Visit Don Bosco Museum and Ward's Lake.", evening: "Dine at Dylan's Cafe, sample Khasi noodles." } },
+      { day: 3, title: "Shillong to Cherrapunji", activities: { morning: "Drive to Cherrapunji. Visit Garden of Caves along the route.", afternoon: "Explore Mawsmai Cave's limestone structures.", evening: "Watch the sunset from Nohkalikai Falls viewpoint." } },
+      { day: 4, title: "Living Root Bridge Trek", activities: { morning: "Descend 3,500 steps to Nongriat Living Root Bridge.", afternoon: "Swim in the nearby natural turquoise pools.", evening: "Climb back up slowly. Settle in with hot ginger tea." } },
+      { day: 5, title: "Mawlynnong Cleanest Village", activities: { morning: "Drive to Mawlynnong, Asia's cleanest village.", afternoon: "Walk the bamboo skywalk, view Bangladesh plains.", evening: "Return to Shillong for a relaxing local dinner." } }
+    ]
+  },
+  "Sikkim (Gangtok & Pelling)": {
+    region: "India North-East",
+    currency: "INR (Indian Rupee)",
+    language: "Nepali, Bhutia, Lepcha, English",
+    localEtiquette: "Remove shoes at monasteries; do not litter; plastic bags are banned in Sikkim.",
+    safetyTips: "Carry mountain sickness medicine. Secure inner-line permits early.",
+    emergencyContacts: "Police: 100, Sikkim Tourism: +91-3592-209000",
+    simInfo: "Airtel and Jio work well in Gangtok. Signals drop in North Sikkim.",
+    accommodations: {
+      "Backpacking": { name: "Tagalong Backpackers", price: "₹700/night", pros: "Cozy library, central location." },
+      "Budget": { name: "Pelling Homestay", price: "₹2,000/night", pros: "Family hospitality, Kanchenjunga view." },
+      "Mid-range": { name: "Hotel Tibet Gangtok", price: "₹6,000/night", pros: "Tibetan decor, walking distance to MG Marg." },
+      "Luxury": { name: "Elgin Nor-Khill", price: "₹18,000/night", pros: "Heritage palace, luxury gardens, spa." }
+    },
+    transport: { desc: "Hired SUV (Innova/Bolero) with mountain-certified local driver." },
+    food: { local: "Momos, Thukpa noodle soup, Gundruk, Chhurpi cheese.", restaurants: "Baker's Cafe (MG Marg), Nimtho (Gangtok)." },
+    attractions: [
+      { name: "Tsomgo Lake & Baba Mandir", why: "Glacial alpine lake at 12,400 ft.", dur: "5 hours", fee: "Permit needed", time: "Early Morning" },
+      { name: "Rumtek Monastery", why: "Largest monastery in Sikkim.", dur: "2 hours", fee: "₹20", time: "Afternoon" }
+    ],
+    hiddenGems: [{ name: "Temi Tea Garden", desc: "Sikkim's only organic tea estate nestled on sloped ridges." }],
+    packing: ["Heavy winter coats", "Thermal innerwear", "Sunscreen (UV rays are strong)"],
+    itineraryDays: [
+      { day: 1, title: "Arrive Gangtok", activities: { morning: "Drive from Bagdogra Airport to Gangtok.", afternoon: "Check in to hotel, unpack and acclimatize.", evening: "Walk along MG Marg, shop for local handicrafts." } },
+      { day: 2, title: "Gangtok Local Monastery Tour", activities: { morning: "Visit Rumtek Monastery and Enchey Monastery.", afternoon: "Explore Namgyal Institute of Tibetology and Do Drul Chorten.", evening: "Enjoy traditional butter tea at Nimtho Restaurant." } },
+      { day: 3, title: "Tsomgo Lake Excursion", activities: { morning: "Drive through high-altitude roads to Tsomgo Lake.", afternoon: "Visit Baba Harbhajan Singh Memorial Temple.", evening: "Return to Gangtok, walk local night markets." } },
+      { day: 4, title: "Gangtok to Pelling", activities: { morning: "Drive to Ravangla. Stop at Buddha Park (Tathagata Tsal).", afternoon: "Continue drive to Pelling, check in to hotel.", evening: "Watch sunset over Kanchenjunga peaks from balcony." } },
+      { day: 5, title: "Pelling Exploration & Skywalk", activities: { morning: "Walk the Pelling Glass Skywalk and Pemayangtse Monastery.", afternoon: "Visit Rabdentse Ruins and Kechopalri Sacred Lake.", evening: "Relax with momos and local soup at Pelling Market." } }
+    ]
+  },
+  "Arunachal Pradesh (Tawang Valley)": {
+    region: "India North-East",
+    currency: "INR (Indian Rupee)",
+    language: "Monpa, Hindi, English",
+    localEtiquette: "Circumambulate temples clockwise; seek permit (ILP) beforehand.",
+    safetyTips: "High altitudes. Snow blocks Sela Pass in winter. Keep extra warm clothes.",
+    emergencyContacts: "Police: 100, Tawang District Admin: +91-3794-222221",
+    simInfo: "BSNL has widest reach; Airtel and Jio work in main Tawang town.",
+    accommodations: {
+      "Backpacking": { name: "Tawang Backpackers Den", price: "₹800/night", pros: "Social room, budget wood fire heating." },
+      "Budget": { name: "Monpa Heritage Cottage", price: "₹2,200/night", pros: "Traditional wooden room, hot home meals." },
+      "Mid-range": { name: "Hotel Gakyi Khang Zhang", price: "₹5,500/night", pros: "Great heating, mountain view restaurant." },
+      "Luxury": { name: "Dondrub Homestay Luxury Resort", price: "₹14,000/night", pros: "Premium mountain view balconies, local food tour." }
+    },
+    transport: { desc: "Strong 4x4 vehicles only. Winding mountain cliffs require experienced drivers." },
+    food: { local: "Zan, Khura pancake, Gyapa Khazi rice, local yak butter tea.", restaurants: "Dragon Restaurant, Orange Bar & Restro." },
+    attractions: [
+      { name: "Tawang Monastery", why: "Second largest Buddhist monastery in the world.", dur: "3 hours", fee: "Free", time: "Morning" },
+      { name: "Sela Pass", why: "Breathtaking snow pass at 13,700 ft with Sela Lake.", dur: "1.5 hours", fee: "Free", time: "Noon" }
+    ],
+    hiddenGems: [{ name: "Nuranang Falls (Jang)", desc: "A magnificent 100m white sheet waterfall." }],
+    packing: ["Down feather jacket", "Thermal gloves & socks", "Lip balm"],
+    itineraryDays: [
+      { day: 1, title: "Guwahati to Bomdila", activities: { morning: "Start early drive from Guwahati airport to Bomdila.", afternoon: "Drive past lush Assamese tea farms into mountains.", evening: "Check in at Bomdila, visit Bomdila Monastery." } },
+      { day: 2, title: "Bomdila to Tawang via Sela Pass", activities: { morning: "Drive up winding roads. Stop at Sela Pass for photos.", afternoon: "Visit Jaswant Garh War Memorial on the route.", evening: "Arrive in Tawang valley. Check in and rest." } },
+      { day: 3, title: "Tawang Monastery & War Memorial", activities: { morning: "Explore the ancient Tawang Monastery.", afternoon: "Walk through the Monpa local craft markets.", evening: "Watch the light & sound show at Tawang War Memorial." } },
+      { day: 4, title: "Bum La Pass Border Excursion", activities: { morning: "Ride in local 4x4 up to Bum La Pass (China Border).", afternoon: "Stop at Madhuri Lake (Sangetsar Lake) on the return.", evening: "Relax in town with momos and hot soup." } },
+      { day: 5, title: "Tawang to Dirang Valley", activities: { morning: "Drive down to Dirang. Stop at Nuranang Waterfalls.", afternoon: "Explore Dirang Dzong (traditional fort village).", evening: "Soak in hot water springs near Dirang River." } }
+    ]
+  },
+  "Darjeeling, West Bengal": {
+    region: "Bengal Hills",
+    currency: "INR (Indian Rupee)",
+    language: "Nepali, Bengali, Hindi, English",
+    localEtiquette: "Littering is heavily fined. Keep noise levels low near monasteries.",
+    safetyTips: "Acclimatize to hill heights. Road blocks can occur in heavy monsoon.",
+    emergencyContacts: "Police: 100, Darjeeling Tourism: +91-354-2254422",
+    simInfo: "Airtel, Jio, and Vodafone work well in town center.",
+    accommodations: {
+      "Backpacking": { name: "Hideout Travel Loft", price: "₹600/night", pros: "Cozy library fireplace, social dorms." },
+      "Budget": { name: "Golden Wind Horse Homestay", price: "₹1,800/night", pros: " Tibetan food, family hosting." },
+      "Mid-range": { name: "Dekeling Hotel", price: "₹4,500/night", pros: "Heritage design, directly on Mall Road." },
+      "Luxury": { name: "Windamere Hotel", price: "₹18,000/night", pros: "Colonial English high-tea, heritage rooms." }
+    },
+    transport: { desc: "Shared jeeps or private cabs. Walk around the mall road area." },
+    food: { local: "Tibetan momos, Darjeeling tea, Thukpa soup.", restaurants: "Keventers, Glenary's Bakery, Kunga Restaurant." },
+    attractions: [
+      { name: "Tiger Hill Sunrise", why: "Breathtaking sunrise over Kanchenjunga.", dur: "3 hours", fee: "₹50", time: "Early Morning (4:30 AM)" },
+      { name: "UNESCO Toy Train Joyride", why: "Heritage steam engine ride to Ghoom.", dur: "2 hours", fee: "₹1,500", time: "Morning" }
+    ],
+    hiddenGems: [{ name: "Happy Valley Tea Estate", desc: "Tour the organic processing plant and try tea tasting." }],
+    packing: ["Woolen jacket", "Good walking shoes", "Umbrella"],
+    itineraryDays: [
+      { day: 1, title: "Arrive in Darjeeling", activities: { morning: "Drive from Bagdogra airport up the hill road.", afternoon: "Check in, walk through the pine trees on Mall Road.", evening: "Enjoy tea and pastries at Glenary's rooftop café." } },
+      { day: 2, title: "Sunrise at Tiger Hill", activities: { morning: "Start at 4 AM to watch Kanchenjunga sunrise.", afternoon: "Visit Ghoom Monastery and Batasia Loop toy train track.", evening: "Dine on Thukpa soup at Kunga Tibetan restaurant." } },
+      { day: 3, title: "Tea Gardens & Zoo", activities: { morning: "Tour Happy Valley Tea Estate, walk among tea shrubs.", afternoon: "Visit Padmaja Naidu Himalayan Zoo and Mountaineering Institute.", evening: "Relax at Chowrasta square, shop for local woolens." } },
+      { day: 4, title: "Mirik Lake Day Trip", activities: { morning: "Drive through pine woods to Sumendu Lake in Mirik.", afternoon: "Enjoy a boat ride, walk the floating bridge.", evening: "Stop at Pashupati market (Nepal Border) for goods." } },
+      { day: 5, title: "Japanese Temple & Pagoda", activities: { morning: "Visit the peaceful Japanese Temple and Peace Pagoda.", afternoon: "Walk to Tibetan Refugee Self Help Centre for carpets.", evening: "Enjoy a final dinner with Kanchenjunga views." } }
+    ]
+  },
+  "Ladakh (Leh & Nubra)": {
+    region: "Himalayas / Northern India",
+    currency: "INR (Indian Rupee)",
+    language: "Ladakhi, Hindi, English",
+    localEtiquette: "Do not throw plastics; remove shoes in shrines; say 'Julley' (Hello).",
+    safetyTips: "Take absolute rest on Day 1 to avoid AMS mountain sickness.",
+    emergencyContacts: "Police: 100, SNM Hospital Leh: +91-1982-252014",
+    simInfo: "Only postpaid SIM cards work. BSNL & Airtel have best signals.",
+    accommodations: {
+      "Backpacking": { name: "The Zostel Leh", price: "₹900/night", pros: "Social vibes, clean dorms, cafe." },
+      "Budget": { name: "Solpon Homestay Leh", price: "₹2,000/night", pros: "Organic vegetable gardens, local organic food." },
+      "Mid-range": { name: "Hotel Singge Palace", price: "₹6,500/night", pros: "Excellent heating, clean rooms, good restaurant." },
+      "Luxury": { name: "The Grand Dragon Ladakh", price: "₹20,000/night", pros: "Five-star facilities, oxygen lines, royal views." }
+    },
+    transport: { desc: "Hired private SUV. Permit required for Nubra & Pangong Tso." },
+    food: { local: "Chutagi dumplings, Skyu soup, apricot jam.", restaurants: "Leh Cafe, Chopsticks Noodle Bar." },
+    attractions: [
+      { name: "Pangong Tso Lake", why: "Saline high altitude lake that changes colors.", dur: "5 hours", fee: "Permit required", time: "Afternoon" },
+      { name: "Khardung La Pass", why: "One of the highest motorable passes at 17,580 ft.", dur: "1 hour", fee: "Free", time: "Morning" }
+    ],
+    hiddenGems: [{ name: "Diskit Monastery Sand Dunes", desc: "Double-humped camel rides on cold desert dunes." }],
+    packing: ["Heavy windcheater", "Thermal gloves", "Sunscreen & Sunglasses"],
+    itineraryDays: [
+      { day: 1, title: "Acclimatize in Leh", activities: { morning: "Fly into Leh airport. Transfer to hotel.", afternoon: "Strict rest in hotel to adapt to 11,500 ft elevation.", evening: "Very light walk to Leh Main Market, drink warm tea." } },
+      { day: 2, title: "Leh Palaces & Monasteries", activities: { morning: "Visit Leh Palace and Tsemo Castle ruins.", afternoon: "Walk up to Shanti Stupa for panoramic valley views.", evening: "Dine at Chopsticks, taste local dumplings." } },
+      { day: 3, title: "Drive to Nubra Valley", activities: { morning: "Cross Khardung La Pass (high altitude snow peak).", afternoon: "Arrive in Nubra, check in to local deluxe desert tents.", evening: "Enjoy camel safari on Hunder Sand Dunes." } },
+      { day: 4, title: "Nubra to Pangong Lake", activities: { morning: "Drive along Shyok River to Pangong Tso Lake.", afternoon: "Admire the deep blue lake waters bordering China.", evening: "Stay in a cozy wooden cottage by the lakeside." } },
+      { day: 5, title: "Pangong Tso back to Leh", activities: { morning: "Watch early morning sun rays reflect off the lake.", afternoon: "Drive back over Chang La Pass (17,688 ft).", evening: "Check in to Leh hotel, buy local dried apricots." } }
+    ]
+  },
+  "Kashmir Valley": {
+    region: "Northern India",
+    currency: "INR (Indian Rupee)",
+    language: "Kashmiri, Urdu, Hindi, English",
+    localEtiquette: "Dress modestly; remove shoes in mosques; bargain politely with vendors.",
+    safetyTips: "Check local news before traveling. Keep identity cards handy.",
+    emergencyContacts: "Police: 100, Kashmir Tourism Board: +91-194-2502279",
+    simInfo: "Postpaid SIM cards work. Jio and Airtel have best connectivity.",
+    accommodations: {
+      "Backpacking": { name: "Srinagar Hostel Hut", price: "₹700/night", pros: "Budget social rooms, clean lounge." },
+      "Budget": { name: "Dal Lake Family Houseboat", price: "₹2,500/night", pros: "Floating room experience, home-cooked food." },
+      "Mid-range": { name: "Khyber Resorts Gulmarg", price: "₹12,000/night", pros: "Wood paneling, glass conservatory, luxury spa." },
+      "Luxury": { name: "The Taj Palace Srinagar", price: "₹25,000/night", pros: "Royal lake gardens, Kashmiri Wazwan feast." }
+    },
+    transport: { desc: "Private car with driver. Shikara boats for lake transport." },
+    food: { local: "Kashmiri Kahwa tea, Rogan Josh, Gushtaba, Haak greens.", restaurants: "Mughal Darbar, Ahdoos Restaurant (Srinagar)." },
+    attractions: [
+      { name: "Gulmarg Gondola Ride", why: "One of the highest cable cars in Asia.", dur: "3 hours", fee: "₹950", time: "Morning" },
+      { name: "Shalimar & Nishat Gardens", why: "Beautiful Mughal terraced gardens and fountains.", dur: "2 hours", fee: "₹24", time: "Afternoon" }
+    ],
+    hiddenGems: [{ name: "Betaab Valley (Pahalgam)", desc: "Meadow lands surrounded by snow capped pines." }],
+    packing: ["Heavy woolens", "Waterproof snow jackets", "Umbrella"],
+    itineraryDays: [
+      { day: 1, title: "Srinagar Lake Houseboat", activities: { morning: "Arrive at Srinagar, transfer to Dal Lake houseboat.", afternoon: "Enjoy a relaxing Shikara boat ride through floating markets.", evening: "Drink hot saffron Kahwa tea on the boat balcony." } },
+      { day: 2, title: "Mughal Gardens Tour", activities: { morning: "Explore Shalimar Bagh and Nishat Bagh terraced lawns.", afternoon: "Visit Hazratbal Shrine and local spice markets.", evening: "Enjoy a authentic Kashmiri Wazwan meal at Ahdoos." } },
+      { day: 3, title: "Gulmarg Meadows & Gondola", activities: { morning: "Drive to Gulmarg. Walk in the pine valleys.", afternoon: "Ride the Phase 1 & 2 Gondola up to Apharwat peak.", evening: "Warm up with local hot stews in a mountain restaurant." } },
+      { day: 4, title: "Pahalgam Valley Day Trip", activities: { morning: "Drive to Pahalgam. Stop at saffron fields on the way.", afternoon: "Explore Betaab Valley and Aru Valley by local pony.", evening: "Return to Srinagar, relax by the houseboat fireplace." } },
+      { day: 5, title: "Sonamarg Glaciers Exploration", activities: { morning: "Drive to Sonamarg, the Meadow of Gold.", afternoon: "Trek or take a pony ride to Thajiwas Glacier snow fields.", evening: "Final shopping in Srinagar for pashmina shawls." } }
+    ]
+  },
+  "Shimla & Manali": {
+    region: "Himalayas / Northern India",
+    currency: "INR (Indian Rupee)",
+    language: "Hindi, Pahari, English",
+    localEtiquette: "Littering is illegal. Respect mountain wildlife.",
+    safetyTips: "Winter roads can be icy. Be careful during rainy season landslides.",
+    emergencyContacts: "Police: 100, Manali Administration: +91-1902-252226",
+    simInfo: "Airtel, Jio, and BSNL have strong 4G networks.",
+    accommodations: {
+      "Backpacking": { name: "The Zostel Manali", price: "₹800/night", pros: "Social backpacker vibe, mountain views." },
+      "Budget": { name: "Old Manali Homestay", price: "₹1,800/night", pros: "Apple orchard views, wooden cottages." },
+      "Mid-range": { name: "Span Resort & Spa", price: "₹10,500/night", pros: "Riverside lawn gardens, premium food." },
+      "Luxury": { name: "The Wildflower Hall Shimla", price: "₹28,000/night", pros: "Infinity heated pool, forest walk paths." }
+    },
+    transport: { desc: "Hired Volvo bus for transit; private cabs for sightseeing." },
+    food: { local: "Siddu bread, Kullu trout fish, red apples.", restaurants: "Johnson's Cafe, Cafe 1947 (Old Manali)." },
+    attractions: [
+      { name: "Solang Valley", why: "Famous hub for paragliding, zorbing, and skiing.", dur: "4 hours", fee: "Activity rates", time: "Morning" },
+      { name: "Atal Tunnel & Sissu", why: "Drive through the long highway tunnel to Lahaul valley.", dur: "5 hours", fee: "Free", time: "Morning" }
+    ],
+    hiddenGems: [{ name: "Jogini Waterfalls", desc: "A pine forest trek leading to high mountain waterfall pools." }],
+    packing: ["Heavy sweaters", "Trekking boots", "Sunscreen"],
+    itineraryDays: [
+      { day: 1, title: "Arrive in Shimla", activities: { morning: "Drive from Kalka station to Shimla.", afternoon: "Check in, walk through Mall Road and The Ridge square.", evening: "Visit Christ Church and try hot snacks in local bazaar." } },
+      { day: 2, title: "Kufri Snow & Pines", activities: { morning: "Drive to Kufri for pine forest paths and yak rides.", afternoon: "Explore Jakhoo Temple and watch the monkey reserve.", evening: "Enjoy a cozy local dinner near the Shimla Mall." } },
+      { day: 3, title: "Shimla to Manali", activities: { morning: "Start scenic drive to Manali along the Beas River.", afternoon: "Pass through Pandoh Dam, stop at Kullu shawl weavers.", evening: "Check in at Manali, relax near Old Manali lanes." } },
+      { day: 4, title: "Solang Valley Activities", activities: { morning: "Drive to Solang Valley for paragliding and scenic peaks.", afternoon: "Hike up the pine forest track to Jogini Waterfalls.", evening: "Dine on Kullu trout at Cafe 1947 with live music." } },
+      { day: 5, title: "Atal Tunnel & Sissu Snow", activities: { morning: "Drive through Atal Tunnel to the snowy fields of Sissu.", afternoon: "Play in the snow and look at Sissu waterfall cascades.", evening: "Buy apples and jam, check out local wood carvings." } }
+    ]
+  },
+  "Digha, West Bengal": {
+    region: "Bengal Coast",
+    currency: "INR (Indian Rupee)",
+    language: "Bengali, Hindi, English",
+    localEtiquette: "Bargain with local beach vendors; do not enter deep water during high tides.",
+    safetyTips: "Listen to beach lifeguards. Watch out for muddy quicksands.",
+    emergencyContacts: "Police: +91-3220-266222, Digha State General Hospital: +91-3220-266001",
+    simInfo: "Airtel, Jio, and BSNL have strong internet connectivity.",
+    accommodations: {
+      "Backpacking": { name: "Beachside Yatri Inn", price: "₹500/night", pros: "Clean basic rooms, close to station." },
+      "Budget": { name: "Digha Tourist Lodge", price: "₹1,500/night", pros: "Government managed, clean, secure garden yard." },
+      "Mid-range": { name: "Hotel Sea Hawk Old Digha", price: "₹3,500/night", pros: "Heritage ocean-facing balconies, sea views." },
+      "Luxury": { name: "Sayaji Digha Luxury Resort", price: "₹7,500/night", pros: "Premium pools, multi-cuisine seafood buffet." }
+    },
+    transport: { desc: "Local cycle rickshaws, auto-rickshaws, or walk along sea concrete roads." },
+    food: { local: "Dab-er-Jal (coconut water), Fried Pomfret, Crab Masala, Rosogolla.", restaurants: "Piyal Bar & Restaurant, local beach shacks." },
+    attractions: [
+      { name: "New Digha Beach", why: "Wide sandy beach perfect for swimming and sunsets.", dur: "3 hours", fee: "Free", time: "Evening" },
+      { name: "Marine Aquarium & Research Centre", why: "Largest marine display in regional India.", dur: "1.5 hours", fee: "Free", time: "Noon" }
+    ],
+    hiddenGems: [{ name: "Udaypur Beach", desc: "A quiet, pine-tree bordered beach extending into Orissa state." }],
+    packing: ["Cotton clothes", "Sun hat and shades", "Flip flops"],
+    itineraryDays: [
+      { day: 1, title: "Arrive in Digha", activities: { morning: "Board the morning train from Howrah to Digha.", afternoon: "Check in to hotel, take rest.", evening: "Walk along Old Digha sea wall, eat fried fish." } },
+      { day: 2, title: "Beach fun & Aquarium", activities: { morning: "Enjoy swimming and horse riding at New Digha Beach.", afternoon: "Explore the Marine Aquarium fish collections.", evening: "Walk Udaypur Beach's quiet sand dunes, drink coconut water." } },
+      { day: 3, title: "Tajpur Pine Forest Day Trip", activities: { morning: "Drive to Tajpur beach, a quiet shore lined with pine woods.", afternoon: "Walk the uncrowded sands and watch waves roll in.", evening: "Enjoy fresh crab curry cooked by a local beach shack." } },
+      { day: 4, title: "Shankarpur Fishing Harbor", activities: { morning: "Explore Shankarpur beach and harbor, a bustling commercial fishing center.", afternoon: "Photograph colorful wooden fishing boats lining the sea docks.", evening: "Enjoy a final sea view dinner at a beachfront hotel." } },
+      { day: 5, title: "Seaside Sayonara", activities: { morning: "Shop for local cashew nuts and woven mats at the station market.", afternoon: "Check out of hotel and board your return train/bus back to Kolkata.", evening: "Arrive at your home, ending the trip." } }
+    ]
+  },
+  "Kolkata, West Bengal": {
+    region: "Eastern India",
+    currency: "INR (Indian Rupee)",
+    language: "Bengali, Hindi, English",
+    localEtiquette: "Say 'Nomoshkar' when greeting; try riding the tram; remove shoes before entering temples.",
+    safetyTips: "Be careful crossing roads. Use registered yellow cabs or Uber.",
+    emergencyContacts: "Police: 100, Medical Emergency: 102, West Bengal Tourism: +91-33-22436491",
+    simInfo: "Excellent 4G/5G on all major networks (Jio, Airtel, Vodafone).",
+    accommodations: {
+      "Backpacking": { name: "Kolkata Backpackers Loft", price: "₹600/night", pros: "Social room, central Park Street area." },
+      "Budget": { name: "The Broadway Hotel", price: "₹1,800/night", pros: "Heritage retro rooms, close to metro station." },
+      "Mid-range": { name: "The Peerless Inn", price: "₹6,000/night", pros: "Centrally located, legendary Bengali restaurant inside." },
+      "Luxury": { name: "The Oberoi Grand", price: "₹18,000/night", pros: "Heritage luxury palace pool, classic fine dining." }
+    },
+    transport: { desc: "Try the Metro, classic yellow taxis, hand-pulled rickshaws, and iconic heritage trams." },
+    food: { local: "Kolkata Biryani (with potato), Sondesh, Rosogolla, Phuchka, Kathi Rolls.", restaurants: "6 Ballygunge Place, Peter Cat (Park Street), Flurys." },
+    attractions: [
+      { name: "Victoria Memorial", why: "Historic white marble museum from the British empire era.", dur: "2.5 hours", fee: "₹60", time: "Morning" },
+      { name: "Dakshineswar Kali Temple", why: "Famous riverside temple dedicated to Goddess Kali.", dur: "3 hours", fee: "Free", time: "Early Morning" }
+    ],
+    hiddenGems: [{ name: "Kumortuli Clay Village", desc: "Watch local artisans sculpt giant festival deities from river clay." }],
+    packing: ["Cotton wear", "Comfortable walking shoes", "Hand sanitizer"],
+    itineraryDays: [
+      { day: 1, title: "Welcome to Kolkata", activities: { morning: "Arrive at Howrah Station or Airport. Check in.", afternoon: "Stroll Park Street, enjoy high tea at historic Flurys café.", evening: "Taste legendary Chelo Kebabs at Peter Cat restaurant." } },
+      { day: 2, title: "Heritage Walk", activities: { morning: "Explore Victoria Memorial Gardens and St. Paul's Cathedral.", afternoon: "Walk through Indian Museum, the oldest in Asia.", evening: "Drive past Princep Ghat, watch Howrah Bridge light up." } },
+      { day: 3, title: "Dakshineswar River Cruise", activities: { morning: "Visit Dakshineswar Temple, cross Ganges by boat to Belur Math.", afternoon: "Visit Kumortuli clay modeling center.", evening: "Enjoy a traditional Bengali fish meal at 6 Ballygunge Place." } },
+      { day: 4, title: "College Street Book Market", activities: { morning: "Explore College Street (largest second-hand book market).", afternoon: "Drink coffee at the historic Coffee House, debate with students.", evening: "Shop for sarees and sweets at New Market bazaar." } },
+      { day: 5, title: "South Kolkata Temples", activities: { morning: "Visit Kalighat Temple and Birla Temple.", afternoon: "Pack local sweets (Rosogolla) from KC Das or Balaram Mullick.", evening: "Transfer to airport/station for departure." } }
+    ]
+  },
+  "Tokyo, Japan": {
+    region: "East Asia",
+    currency: "JPY (Japanese Yen)",
+    language: "Japanese, basic English",
+    localEtiquette: "Do not tip; walk on the left side of stairs; speak quietly in trains.",
+    safetyTips: "Extremely safe. Keep passport with you. Note exit signs.",
+    emergencyContacts: "Police: 110, Ambulance/Fire: 119",
+    simInfo: "Buy pocket Wi-Fi router or eSIM from Haneda/Narita airport.",
+    accommodations: {
+      "Backpacking": { name: "Nui. Hostel & Bar Lounge", price: "¥4,000/night", pros: "Vibrant cafe lobby, clean shared dorms." },
+      "Budget": { name: "TOKYO Capsule Inn Shimbashi", price: "¥8,500/night", pros: "Unique capsule room, central train links." },
+      "Mid-range": { name: "Hotel Gracery Shinjuku", price: "¥24,000/night", pros: "Giant Godzilla head, close to Shinjuku station." },
+      "Luxury": { name: "The Park Hyatt Tokyo", price: "¥85,000/night", pros: "Lost in Translation bar, penthouse skyline pools." }
+    },
+    transport: { desc: "Tokyo Subway system (buy Pasmo/Suica IC card)." },
+    food: { local: "Ramen, Sushi, Yakitori, Matcha soft-cream.", restaurants: "Ichiran Ramen, Sushi Dai (Toyosu Market)." },
+    attractions: [
+      { name: "Senso-ji Temple (Asakusa)", why: "Tokyo's oldest and most iconic temple gate.", dur: "2 hours", fee: "Free", time: "Morning" },
+      { name: "Shibuya Crossing", why: "World's busiest pedestrian scramble crosswalk.", dur: "1 hour", fee: "Free", time: "Evening" }
+    ],
+    hiddenGems: [{ name: "Golden Gai (Shinjuku)", desc: "A maze of tiny, cozy 4-seat theme bars." }],
+    packing: ["Comfortable slip-on shoes", "Coin purse", "Portable trash bag"],
+    itineraryDays: [
+      { day: 1, title: "Arrive in Tokyo", activities: { morning: "Land at Narita Airport, take Skyliner train to central Tokyo.", afternoon: "Check in, walk around the neon-lit lanes of Shinjuku.", evening: "Dine on steaming Tonkotsu ramen at Ichiran." } },
+      { day: 2, title: "Asakusa & Akihabara", activities: { morning: "Walk through Senso-ji Temple and Nakamise market streets.", afternoon: "Explore anime and tech shops in Akihabara Electric Town.", evening: "Relax with local food at a Shinjuku Izakaya pub." } },
+      { day: 3, title: "Shibuya & Harajuku", activities: { morning: "Walk through Meiji Shrine woods, shop in Harajuku.", afternoon: "Walk down Shibuya crossing, check out giant Shibuya Sky views.", evening: "Enjoy fresh sushi at Genki revolving sushi diner." } },
+      { day: 4, title: "TeamLab & Odaiba Marina", activities: { morning: "Explore the immersive digital rooms at TeamLab Planets.", afternoon: "Visit Odaiba beach park, look at the giant Gundam statue.", evening: "Enjoy a teppanyaki dinner overlooking the Rainbow Bridge." } },
+      { day: 5, title: "Ueno Park & Sayonara", activities: { morning: "Walk Ueno Park gardens and Tokyo National Museum.", afternoon: "Shop for matcha sweets and snacks at Ameyoko Market.", evening: "Transfer to airport for return flight." } }
+    ]
+  },
+  "Paris, France": {
+    region: "Western Europe",
+    currency: "EUR (Euro)",
+    language: "French, English",
+    localEtiquette: "Say 'Bonjour' before asking questions; do not talk loudly; eat at cafes.",
+    safetyTips: "Watch out for pickpockets near Eiffel Tower and metro lines.",
+    emergencyContacts: "Police: 17, Ambulance: 15, General Help: 112",
+    simInfo: "Buy Orange or Free Mobile prepaid SIM at airport kiosks.",
+    accommodations: {
+      "Backpacking": { name: "Les Piaules Nation Hostel", price: "€38/night", pros: "Rooftop deck, trendy bar space." },
+      "Budget": { name: "Hotel Generator Paris", price: "€85/night", pros: "Cozy rooms, close to Canal Saint-Martin." },
+      "Mid-range": { name: "Hotel Caron de Beaumarchais", price: "€190/night", pros: "18th-century antique rooms, central Le Marais location." },
+      "Luxury": { name: "Ritz Paris (Place Vendome)", price: "€950/night", pros: "Classic French suites, Hemingway bar, pool." }
+    },
+    transport: { desc: "Paris Metro (buy T+ ticket booklets or Navigo Easy card)." },
+    food: { local: "Croissants, Escargot, Duck Confit, Macarons.", restaurants: "Le Relais de l'Entrecote, local bakeries." },
+    attractions: [
+      { name: "Eiffel Tower", why: "The ultimate iron tower symbol of France.", dur: "3 hours", fee: "€26 (summit elevator)", time: "Sunset" },
+      { name: "Louvre Museum", why: "World's largest art museum holding the Mona Lisa.", dur: "4 hours", fee: "€17", time: "Morning" }
+    ],
+    hiddenGems: [{ name: "Coulée verte René-Dumont", desc: "A linear park walkway built on an elevated old railway track." }],
+    packing: ["Stylish casual clothes", "Canvas tote bag", "Adapters"],
+    itineraryDays: [
+      { day: 1, title: "Welcome to Paris", activities: { morning: "Arrive at CDG Airport, catch train to city center.", afternoon: "Check in, walk through Le Marais boutique streets.", evening: "Dine on steak frites at Le Relais de l'Entrecote." } },
+      { day: 2, title: "Louvre & Seine Cruise", activities: { morning: "Visit the Louvre Museum to see classic artwork.", afternoon: "Walk through Tuileries Gardens, visit Notre-Dame facade.", evening: "Take a scenic sunset boat cruise along the Seine River." } },
+      { day: 3, title: "Montmartre & Eiffel Tower", activities: { morning: "Walk up the cobbled lanes of Montmartre to Sacre-Coeur.", afternoon: "Observe portrait artists at Place du Tertre, eat crepes.", evening: "Climb the Eiffel Tower to see Paris city lights sparkle." } },
+      { day: 4, title: "Palace of Versailles Trip", activities: { morning: "Take RER C train to Palace of Versailles gardens.", afternoon: "Tour the Hall of Mirrors and royal bedrooms.", evening: "Return to Paris, enjoy local cheese and wine at a bistro." } },
+      { day: 5, title: "Champs-Elysees & Macarons", activities: { morning: "Walk down Champs-Elysees to the Arc de Triomphe.", afternoon: "Buy macarons at Laduree, walk the Latin Quarter.", evening: "Transfer to airport for return departure." } }
+    ]
+  },
+  "Bali, Indonesia": {
+    region: "Southeast Asia",
+    currency: "IDR (Indonesian Rupiah)",
+    language: "Indonesian, Balinese, English",
+    localEtiquette: "Wear sarongs in temples; do not step on street flower offerings.",
+    safetyTips: "Only rent scooters if licensed; drink bottled water; protect from mosquitoes.",
+    emergencyContacts: "Police: 110, Ambulance: 118, Tourism: +62-361-224133",
+    simInfo: "Buy Telkomsel tourist SIM card at Ngurah Rai airport.",
+    accommodations: {
+      "Backpacking": { name: "Lay Day Surf Hostel", price: "IDR 150K/night", pros: "Pools, surf hire, backpacker social." },
+      "Budget": { name: "Ubud Bamboo Homestay", price: "IDR 400K/night", pros: "Rice field view, healthy breakfast." },
+      "Mid-range": { name: "Alila Ubud Boutique", price: "IDR 2.2M/night", pros: "Infinity valley pool, organic spa." },
+      "Luxury": { name: "Ayana Resort Jimbaran", price: "IDR 6.5M/night", pros: "Rock Bar, private ocean villas." }
+    },
+    transport: { desc: "Hire private driver or rent local scooter (Grab/Gojek apps)." },
+    food: { local: "Nasi Goreng, Babi Guling, Satay, fresh young coconuts.", restaurants: "Naughty Nuri's, Bebek Bengil (Ubud)." },
+    attractions: [
+      { name: "Ubud Monkey Forest", why: "Sacred temple woods populated by wild monkeys.", dur: "2 hours", fee: "IDR 80K", time: "Morning" },
+      { name: "Tanah Lot Temple", why: "Historic offshore Hindu temple famous for sunsets.", dur: "2 hours", fee: "IDR 60K", time: "Sunset" }
+    ],
+    hiddenGems: [{ name: "Tegalalang Rice Terraces", desc: "Beautiful valley ridges of green stepped rice farms." }],
+    packing: ["Swimwear & sandals", "Mosquito repellent spray", "Sarong"],
+    itineraryDays: [
+      { day: 1, title: "Arrive in Bali", activities: { morning: "Land in Denpasar, meet your private driver.", afternoon: "Drive to Ubud, check into your green resort.", evening: "Stroll Ubud market, enjoy organic local nasi goreng." } },
+      { day: 2, title: "Ubud Sacred Woods", activities: { morning: "Explore Ubud Monkey Forest trails.", afternoon: "Walk through green Tegalalang Rice Terraces and swing.", evening: "Relax with local crispy duck at Bebek Bengil." } },
+      { day: 3, title: "Tanah Lot Sea Temple", activities: { morning: "Visit Royal Temple of Mengwi (Taman Ayun).", afternoon: "Drive to offshore Tanah Lot Temple.", evening: "Enjoy a seafood dinner on Jimbaran beach sands." } },
+      { day: 4, title: "Uluwatu Cliff & Fire Dance", activities: { morning: "Drive down to Uluwatu Temple cliffs.", afternoon: "Explore sandy Padang Padang beach caves.", evening: "Watch the traditional Kecak Fire Dance at sunset on cliffs." } },
+      { day: 5, title: "Seminyak & Departure", activities: { morning: "Indulge in a traditional Balinese massage.", afternoon: "Shop for wooden crafts in Seminyak lanes.", evening: "Transfer to airport for return departure." } }
+    ]
+  }
+};
+
+// 2. CHATBOT AGENT CONTROLLER
+const JourneyGenie = {
+  // State variables
+  apiKey: "",
+  isAskingQuestions: true,
+  currentQuestionIndex: 0,
+  
+  // Data gathered
+  destination: "",
+  departureCity: "",
+  travelersCount: 1,
+  travelDate: "",
+  tripDuration: 5,
+  budgetTier: "Mid-range",
+  interests: [],
+  transportation: "Private Driver",
+  accommodation: "3-Star Hotels",
+  dietary: "None",
+  specialRequests: "",
+
+  // Question sequence
+  questions: [
+    {
+      key: "destination",
+      text: "Hello! I am JourneyGenie, your AI travel agent. Let's plan your next trip! ✈️<br><br>First, **where would you like to travel?** (Try picking Sikkim, Darjeeling, Kashmir, Kolkata, or Tokyo!)",
+      chips: ["Darjeeling, West Bengal", "Kashmir Valley", "Ladakh (Leh & Nubra)", "Kolkata, West Bengal", "Tokyo, Japan", "Paris, France"]
+    },
+    {
+      key: "departureCity",
+      text: "Nice choice! **Which city are you departing from?**",
+      chips: ["Kolkata", "Delhi", "Mumbai", "Guwahati", "London", "New York"]
+    },
+    {
+      key: "travelersCount",
+      text: "Got it. **How many travelers are planning to go?** (Enter a number)",
+      chips: ["1 (Solo)", "2 (Couple)", "3", "4", "5+"]
+    },
+    {
+      key: "travelDate",
+      text: "Great! **What is your travel start date?** (e.g. YYYY-MM-DD)",
+      chips: ["Next Month", "2026-08-15", "2026-10-01", "2026-12-20"]
+    },
+    {
+      key: "tripDuration",
+      text: "Understood. **How many days will the trip be?** (Pick 1 to 10 days)",
+      chips: ["3 Days", "5 Days", "7 Days", "10 Days"]
+    },
+    {
+      key: "budgetTier",
+      text: "Perfect. **What is your budget tier style?**",
+      chips: ["Backpacking", "Budget", "Mid-range", "Luxury"]
+    },
+    {
+      key: "interests",
+      text: "Select your **primary interest** for the activities:",
+      chips: ["Nature", "Adventure", "History", "Food", "Beaches", "Photography"]
+    },
+    {
+      key: "transportation",
+      text: "How do you prefer to get around **locally**?",
+      chips: ["Private Driver", "Public Subway / Metro", "Rental Scooter", "Shared Taxi"]
+    },
+    {
+      key: "accommodation",
+      text: "What is your preferred **hotel style**?",
+      chips: ["Hostels / Lodges", "3-Star Hotels", "Boutique Homestays", "Luxury Resorts"]
+    },
+    {
+      key: "dietary",
+      text: "Do you have any **dietary restrictions**?",
+      chips: ["None", "Vegetarian", "Vegan", "Halal", "Gluten-Free"]
+    },
+    {
+      key: "specialRequests",
+      text: "Almost done! Enter any **special requests** (e.g. slow pace, wheelchair accessibility, extra rest) or type 'None':",
+      chips: ["None", "Slow paced pace", "Senior citizen friendly", "Kid friendly"]
+    },
+    {
+      key: "finalize",
+      text: "All your preferences have been successfully recorded! Ready to generate your custom travel package?",
+      chips: ["Thank you! 🙏"]
+    }
+  ],
+
+  init() {
+    this.bindDOMElements();
+    this.registerEvents();
+    this.loadSavedAPIKey();
+    this.startChatLoop();
+  },
+
+  bindDOMElements() {
+    this.apiToggleBtn = document.getElementById("api-toggle-btn");
+    this.apiConfigPanel = document.getElementById("api-config-panel");
+    this.geminiApiKeyInput = document.getElementById("gemini-api-key");
+    this.saveKeyBtn = document.getElementById("save-key-btn");
+    this.clearKeyBtn = document.getElementById("clear-key-btn");
+    this.apiStatusBadge = document.getElementById("api-status-badge");
+    
+    this.chatHistory = document.getElementById("chat-history");
+    this.chatUserInput = document.getElementById("chat-user-input");
+    this.chatSendBtn = document.getElementById("chat-send-btn");
+    this.suggestionChips = document.getElementById("suggestion-chips");
+    this.connectionStatus = document.getElementById("connection-status");
+    
+    this.emptyState = document.getElementById("empty-state");
+    this.dashboardView = document.getElementById("dashboard-view");
+    this.printItineraryBtn = document.getElementById("print-itinerary-btn");
+    this.resetChatBtn = document.getElementById("reset-chat-btn");
+  },
+
+  registerEvents() {
+    // API settings toggle
+    this.apiToggleBtn.addEventListener("click", () => {
+      this.apiConfigPanel.classList.toggle("hidden");
+    });
+
+    // Save key
+    this.saveKeyBtn.addEventListener("click", () => {
+      const keyVal = this.geminiApiKeyInput.value.trim();
+      if (keyVal) {
+        localStorage.setItem("jg-gemini-key", keyVal);
+        this.apiKey = keyVal;
+        this.updateAPIKeyUI(true);
+        alert("API Key saved! JourneyGenie is now connected to Live Gemini AI.");
+        this.apiConfigPanel.classList.add("hidden");
+      } else {
+        alert("Please enter a valid key.");
+      }
+    });
+
+    // Clear key
+    this.clearKeyBtn.addEventListener("click", () => {
+      localStorage.removeItem("jg-gemini-key");
+      this.apiKey = "";
+      this.geminiApiKeyInput.value = "";
+      this.updateAPIKeyUI(false);
+      alert("API Key cleared. Switched to Offline Demo mode.");
+    });
+
+    // Send chat message
+    this.chatSendBtn.addEventListener("click", () => this.handleSendMessage());
+    this.chatUserInput.addEventListener("keypress", (e) => {
+      if (e.key === "Enter") this.handleSendMessage();
+    });
+
+    // Print
+    this.printItineraryBtn.addEventListener("click", () => window.print());
+
+    // Demo chips click on empty state dashboard
+    document.querySelectorAll(".demo-chip").forEach(btn => {
+      btn.addEventListener("click", () => {
+        const destName = btn.getAttribute("data-dest");
+        this.loadDemoItinerary(destName);
+      });
+    });
+
+    // Reset Chat action
+    if (this.resetChatBtn) {
+      this.resetChatBtn.addEventListener("click", () => this.resetSession(true));
+    }
+  },
+
+  resetSession(needConfirm) {
+    if (needConfirm && !confirm("Are you sure you want to clear this chat and reset your itinerary?")) {
+      return;
+    }
+    this.isAskingQuestions = true;
+    this.currentQuestionIndex = 0;
+    this.destination = "";
+    this.departureCity = "";
+    this.travelersCount = 1;
+    this.travelDate = "";
+    this.tripDuration = 5;
+    this.budgetTier = "Mid-range";
+    this.interests = [];
+    this.transportation = "Private Driver";
+    this.accommodation = "3-Star Hotels";
+    this.dietary = "None";
+    this.specialRequests = "";
+    
+    this.chatHistory.innerHTML = "";
+    this.suggestionChips.innerHTML = "";
+    
+    this.dashboardView.classList.add("hidden");
+    this.emptyState.classList.remove("hidden");
+    
+    this.startChatLoop();
+  },
+
+  loadSavedAPIKey() {
+    const savedKey = localStorage.getItem("jg-gemini-key");
+    if (savedKey) {
+      this.apiKey = savedKey;
+      this.geminiApiKeyInput.value = savedKey;
+      this.updateAPIKeyUI(true);
+    } else {
+      this.apiKey = "";
+      this.updateAPIKeyUI(false);
+    }
+  },
+
+  updateAPIKeyUI(hasKey) {
+    if (hasKey) {
+      this.apiStatusBadge.className = "status-badge live";
+      this.apiStatusBadge.textContent = "Live AI Mode";
+      this.clearKeyBtn.classList.remove("hidden");
+      this.saveKeyBtn.textContent = "Update Key";
+      this.connectionStatus.textContent = "Online (Live AI)";
+      this.connectionStatus.style.color = "var(--success-color)";
+    } else {
+      this.apiStatusBadge.className = "status-badge offline";
+      this.apiStatusBadge.textContent = "Offline Demo Mode";
+      this.clearKeyBtn.classList.add("hidden");
+      this.saveKeyBtn.textContent = "Save Key";
+      this.connectionStatus.textContent = "Online (Local DB)";
+      this.connectionStatus.style.color = "var(--text-secondary)";
+    }
+  },
+
+  // Conversational loops
+  startChatLoop() {
+    this.chatHistory.innerHTML = "";
+    this.currentQuestionIndex = 0;
+    this.isAskingQuestions = true;
+    this.askNextQuestion();
+  },
+
+  askNextQuestion() {
+    if (this.currentQuestionIndex < this.questions.length) {
+      const q = this.questions[this.currentQuestionIndex];
+      this.appendBotMessage(q.text);
+      this.renderSuggestionChips(q.chips);
+    } else {
+      this.isAskingQuestions = false;
+      this.generateFinalItinerary();
+    }
+  },
+
+  renderSuggestionChips(chips) {
+    this.suggestionChips.innerHTML = "";
+    if (!chips) return;
+    
+    chips.forEach(chipText => {
+      const btn = document.createElement("button");
+      btn.className = "suggestion-chip";
+      btn.textContent = chipText;
+      btn.addEventListener("click", () => {
+        this.chatUserInput.value = chipText;
+        this.handleSendMessage();
+      });
+      this.suggestionChips.appendChild(btn);
+    });
+  },
+
+  async handleSendMessage() {
+    const text = this.chatUserInput.value.trim();
+    if (!text) return;
+
+    // Check for clear/reset inputs to clean the page
+    const cleanText = text.toLowerCase().trim();
+    if (cleanText === "reset" || cleanText === "restart" || cleanText === "clear") {
+      this.chatUserInput.value = "";
+      this.resetSession(false);
+      return;
+    }
+
+    // Display user message
+    this.appendUserMessage(text);
+    this.chatUserInput.value = "";
+    this.suggestionChips.innerHTML = "";
+
+    // Show bot typing status
+    const loaderId = this.showBotTyping();
+
+    setTimeout(async () => {
+      this.removeBotTyping(loaderId);
+      
+      if (this.isAskingQuestions) {
+        // Collect parameter based on current question
+        const q = this.questions[this.currentQuestionIndex];
+        this.saveChatInput(q.key, text);
+        this.currentQuestionIndex++;
+        this.askNextQuestion();
+      } else {
+        // Conversational adjustment chat
+        try {
+          let reply = "";
+          if (this.apiKey) {
+            reply = await this.queryGeminiAdjustment(text);
+          } else {
+            reply = await this.simulateAdjustmentReply(text);
+          }
+          this.appendBotMessage(reply);
+        } catch (err) {
+          console.error(err);
+          this.appendBotMessage(`⚠️ Sorry, I encountered an error: ${err.message}. Reverting to local controls.`);
+        }
+      }
+    }, 850);
+  },
+
+  saveChatInput(key, text) {
+    // Normalizes input types
+    if (key === "travelersCount") {
+      const val = parseInt(text.replace(/\D/g, ""));
+      this.travelersCount = isNaN(val) ? 1 : val;
+    } else if (key === "tripDuration") {
+      const val = parseInt(text.replace(/\D/g, ""));
+      this.tripDuration = isNaN(val) ? 5 : Math.max(1, Math.min(10, val));
+    } else {
+      this[key] = text;
+    }
+  },
+
+  // Append messages
+  appendBotMessage(htmlContent) {
+    const bubble = document.createElement("div");
+    bubble.className = "chat-bubble bot";
+    bubble.innerHTML = `
+      <div class="msg-text">${this.formatMarkdown(htmlContent)}</div>
+    `;
+    this.chatHistory.appendChild(bubble);
+    this.chatHistory.scrollTop = this.chatHistory.scrollHeight;
+  },
+
+  appendUserMessage(text) {
+    const bubble = document.createElement("div");
+    bubble.className = "chat-bubble user";
+    bubble.innerHTML = `
+      <div class="msg-text">${text}</div>
+    `;
+    this.chatHistory.appendChild(bubble);
+    this.chatHistory.scrollTop = this.chatHistory.scrollHeight;
+  },
+
+  showBotTyping() {
+    const loaderId = "loader-" + Date.now();
+    const bubble = document.createElement("div");
+    bubble.className = "chat-bubble bot";
+    bubble.id = loaderId;
+    bubble.innerHTML = `
+      <div class="msg-text">
+        <div class="typing-indicator">
+          <div class="typing-dot"></div>
+          <div class="typing-dot"></div>
+          <div class="typing-dot"></div>
+        </div>
+      </div>
+    `;
+    this.chatHistory.appendChild(bubble);
+    this.chatHistory.scrollTop = this.chatHistory.scrollHeight;
+    return loaderId;
+  },
+
+  removeBotTyping(id) {
+    const loader = document.getElementById(id);
+    if (loader) loader.remove();
+  },
+
+  formatMarkdown(text) {
+    // Basic bold markdown parser
+    return text.replace(/\*\*(.*?)\*\*/g, "<strong>$1</strong>")
+               .replace(/\n/g, "<br>");
+  },
+
+  // Render generator
+  async generateFinalItinerary() {
+    this.appendBotMessage("You're very welcome! JourneyGenie has crafted a magical, customized travel itinerary for you! Have an amazing adventure! 🧞✨");
+    this.appendBotMessage("🔮 JourneyGenie is now compiling your customized travel package...");
+    
+    const loaderId = this.showBotTyping();
+    
+    try {
+      if (this.apiKey) {
+        // Query Live Gemini
+        const data = await this.fetchGeminiItinerary();
+        this.removeBotTyping(loaderId);
+        this.renderLiveItinerary(data);
+        this.appendBotMessage(`🎉 I have generated your personalized live AI plan for **${this.destination}**! Look at the dashboard on the right. You can ask me to adjust details here!`);
+      } else {
+        // Render Local DB Itinerary
+        setTimeout(() => {
+          this.removeBotTyping(loaderId);
+          this.renderLocalItinerary();
+          this.appendBotMessage(`🎉 I have loaded your pre-curated plan for **${this.destination}**! Look at the dashboard on the right. You can ask me to make adjustments anytime.`);
+        }, 1200);
+      }
+    } catch (err) {
+      console.error(err);
+      this.removeBotTyping(loaderId);
+      this.appendBotMessage(`⚠️ AI generation failed: ${err.message}. Falling back to offline local database.`);
+      this.renderLocalItinerary();
+    }
+  },
+
+  loadDemoItinerary(destName) {
+    this.destination = destName;
+    this.departureCity = "Kolkata";
+    this.travelersCount = 2;
+    this.travelDate = "2026-10-12";
+    this.tripDuration = 5;
+    this.budgetTier = "Mid-range";
+    this.interests = ["Nature", "Photography"];
+    this.isAskingQuestions = false;
+    
+    // Simulate chat logs
+    this.chatHistory.innerHTML = "";
+    this.appendBotMessage(`Directly loading demo itinerary for **${destName}**...`);
+    this.renderLocalItinerary();
+  },
+
+  // 3. OFFLINE LOCAL ITINERARY RENDER
+  renderLocalItinerary() {
+    // Check if destination exists in database
+    let key = Object.keys(TRAVEL_DATASET).find(k => k.toLowerCase().includes(this.destination.toLowerCase()));
+    let data = key ? TRAVEL_DATASET[key] : null;
+
+    if (!data) {
+      // Build fallback dataset structure
+      data = this.generateFallbackDataset(this.destination);
+    } else {
+      // Overwrite destination name to actual database key
+      this.destination = key;
+    }
+
+    this.emptyState.classList.add("hidden");
+    this.dashboardView.classList.remove("hidden");
+
+    // A. TRIP SUMMARY RENDER
+    document.getElementById("sum-dest").textContent = this.destination;
+    document.getElementById("sum-days").textContent = `${this.tripDuration} Days`;
+    document.getElementById("sum-dates").textContent = this.formatDateRange(this.travelDate, this.tripDuration);
+    
+    let travelersDesc = `${this.travelersCount} Person`;
+    if (this.travelersCount === 2) travelersDesc = "Couple (2 People)";
+    else if (this.travelersCount > 2) travelersDesc = `${this.travelersCount} Travelers`;
+    document.getElementById("sum-travelers").textContent = travelersDesc;
+    
+    document.getElementById("sum-style").textContent = this.budgetTier;
+
+    // B. BUDGET ESTIMATIONS
+    const budgetCosts = this.calculateLocalBudget(!!key);
+    const breakdownList = document.getElementById("budget-breakdown-list");
+    breakdownList.innerHTML = "";
+    
+    const labelMapping = {
+      flights: "✈️ Flights / Travel",
+      hotel: "🏨 Hotel Lodging",
+      food: "🍜 Local Cuisine",
+      transport: "🚗 Local Transport",
+      activities: "🧗 Sights & Entry Fees",
+      shopping: "🛍️ Local Shopping",
+      emergency: "⚠️ Emergency Buffer"
+    };
+
+    const currencySymbol = this.destination.includes("Tokyo") ? "¥" : (this.destination.includes("Paris") ? "€" : "₹");
+    let totalEstimatedSum = 0;
+
+    Object.keys(budgetCosts).forEach(key => {
+      const itemCost = budgetCosts[key];
+      totalEstimatedSum += itemCost;
+
+      const chartItem = document.createElement("div");
+      chartItem.className = "budget-chart-item";
+      chartItem.innerHTML = `
+        <div class="budget-chart-lbl">
+          <span>${labelMapping[key]}</span>
+          <strong>${currencySymbol}${itemCost.toLocaleString()}</strong>
+        </div>
+        <div class="budget-bar-track">
+          <div class="budget-bar-fill"></div>
+        </div>
+      `;
+      breakdownList.appendChild(chartItem);
+    });
+
+    document.getElementById("sum-total-budget").textContent = `${currencySymbol}${totalEstimatedSum.toLocaleString()}`;
+
+    // Animate fill bars
+    setTimeout(() => {
+      const fills = breakdownList.querySelectorAll(".budget-bar-fill");
+      let idx = 0;
+      Object.keys(budgetCosts).forEach(key => {
+        const percent = totalEstimatedSum > 0 ? (budgetCosts[key] / totalEstimatedSum) * 100 : 0;
+        fills[idx].style.width = `${percent}%`;
+        idx++;
+      });
+    }, 150);
+
+    // C. DAY BY DAY ITINERARY RENDER
+    const dayByDayList = document.getElementById("day-by-day-list");
+    dayByDayList.innerHTML = "";
+    
+    const totalItineraryDays = data.itineraryDays;
+
+    for (let dayNum = 1; dayNum <= this.tripDuration; dayNum++) {
+      const dayTemplate = totalItineraryDays[(dayNum - 1) % totalItineraryDays.length];
+      const dayCostVal = Math.round(budgetCosts.activities / this.tripDuration) + Math.round(budgetCosts.food / this.tripDuration);
+      
+      let morningText = dayTemplate.activities.morning;
+      let afternoonText = dayTemplate.activities.afternoon;
+      let eveningText = dayTemplate.activities.evening;
+      
+      if (this.dietary !== "None" && dayNum % 2 === 0) {
+        afternoonText += ` (Meal customized to match your ${this.dietary} diet requirement).`;
+      }
+      if (this.interests.includes("Nature") && dayNum === 1) {
+        morningText += " Savor the breathtaking scenic views and landscape vistas along the route.";
+      }
+      if (this.interests.includes("Photography")) {
+        eveningText += " Splendid golden-hour photo-spots are located here; make sure to capture frames.";
+      }
+
+      const dayBlock = document.createElement("div");
+      dayBlock.className = "day-block";
+      dayBlock.innerHTML = `
+        <div class="day-header">
+          <h3>Day ${dayNum}: ${dayTemplate.title}</h3>
+          <span class="day-cost-tag">Est. Day Spend: ${currencySymbol}${dayCostVal.toLocaleString()}</span>
+        </div>
+        <div class="day-timeline">
+          <div class="time-slot">
+            <span class="time-label">Morning</span>
+            <div class="slot-detail">
+              <h4>Activity & Exploration</h4>
+              <p>${morningText}</p>
+            </div>
+          </div>
+          <div class="time-slot">
+            <span class="time-label">Afternoon</span>
+            <div class="slot-detail">
+              <h4>Sightseeing & Lunch</h4>
+              <p>${afternoonText}</p>
+            </div>
+          </div>
+          <div class="time-slot">
+            <span class="time-label">Evening</span>
+            <div class="slot-detail">
+              <h4>Dinner & Culture</h4>
+              <p>${eveningText}</p>
+            </div>
+          </div>
+        </div>
+        <div class="day-meta-footer">
+          <span>🚗 Transit: via ${this.transportation}</span>
+          <span>🍲 Food Plan: ${this.dietary === "None" ? "Standard regional cuisine" : `${this.dietary} dietary check`}</span>
+        </div>
+      `;
+      dayByDayList.appendChild(dayBlock);
+    }
+
+    // D. ACCOMMODATION RECOMMENDATIONS RENDER
+    const lodgingList = document.getElementById("hotels-suggestions-list");
+    lodgingList.innerHTML = "";
+    
+    const budgetTiersList = ["Backpacking", "Budget", "Mid-range", "Luxury"];
+    budgetTiersList.forEach(tier => {
+      const lodgingInfo = data.accommodations[tier];
+      const isSelectedTier = (tier === this.budgetTier);
+      
+      const itemCard = document.createElement("div");
+      itemCard.className = "list-item-card";
+      if (isSelectedTier) {
+        itemCard.style.borderColor = "var(--primary-color)";
+        itemCard.style.background = "rgba(99,102,241,0.05)";
+      }
+      
+      itemCard.innerHTML = `
+        <div style="display: flex; justify-content: space-between; align-items: center;">
+          <span class="card-tag">${tier} Option</span>
+          <strong class="highlight">${lodgingInfo.price}</strong>
+        </div>
+        <h4>${lodgingInfo.name} ${isSelectedTier ? "⭐ (Fits Your Style)" : ""}</h4>
+        <p>${lodgingInfo.pros}</p>
+      `;
+      lodgingList.appendChild(itemCard);
+    });
+
+    // E. TRANSPORTATION DESCRIPTION RENDER
+    document.getElementById("transport-plan-desc").innerHTML = `
+      <p><strong>Primary Choice:</strong> ${this.transportation}</p>
+      <p style="margin-top: 8px;">${data.transport.desc}</p>
+    `;
+
+    // F. FOOD RECOMMENDATIONS RENDER
+    let dietPrefix = "";
+    if (this.dietary !== "None") {
+      dietPrefix = `<p style="color:var(--success-color); font-weight:600; margin-bottom:8px;">🥗 Adjusted for: ${this.dietary} Diet</p>`;
+    }
+    document.getElementById("food-recommend-desc").innerHTML = `
+      ${dietPrefix}
+      <p><strong>Local Specialties:</strong> ${data.food.local}</p>
+      <p style="margin-top: 8px;"><strong>Famous Diners/Cafes:</strong> ${data.food.restaurants}</p>
+    `;
+
+    // G. KEY ATTRACTIONS LIST
+    const attractionsList = document.getElementById("key-attractions-list");
+    attractionsList.innerHTML = "";
+    data.attractions.forEach(attr => {
+      const card = document.createElement("div");
+      card.className = "list-item-card";
+      card.innerHTML = `
+        <h4>🌟 ${attr.name}</h4>
+        <p><strong>Why Visit:</strong> ${attr.why}</p>
+        <div class="day-meta-footer" style="border:none; padding:0; margin-top:4px;">
+          <span>⏳ Time: ${attr.dur}</span>
+          <span>🎟️ Entry Fee: ${attr.fee}</span>
+          <span>☀️ Best Visit: ${attr.time}</span>
+        </div>
+      `;
+      attractionsList.appendChild(card);
+    });
+
+    // H. HIDDEN GEMS LIST
+    const gemsList = document.getElementById("hidden-gems-list");
+    gemsList.innerHTML = "";
+    data.hiddenGems.forEach(gem => {
+      const card = document.createElement("div");
+      card.className = "list-item-card";
+      card.innerHTML = `
+        <h4>💎 ${gem.name}</h4>
+        <p>${gem.desc}</p>
+      `;
+      gemsList.appendChild(card);
+    });
+
+    // I. CUSTOM PACKING CHECKLIST
+    const checklistContainer = document.getElementById("packing-checklist-elements");
+    checklistContainer.innerHTML = "";
+    
+    const targetDate = new Date(this.travelDate);
+    const month = targetDate.getMonth();
+    const isWarmSeason = (month >= 4 && month <= 9);
+
+    const regionalChecklist = [...data.packing];
+    if (isWarmSeason) {
+      regionalChecklist.push("Light, breathable cotton outfits");
+    } else {
+      regionalChecklist.push("Thermal wear layers and heavy winter shawl");
+    }
+    
+    if (this.interests.includes("Adventure")) regionalChecklist.push("Hydration flask & energy bars");
+    if (this.interests.includes("Beaches")) regionalChecklist.push("Quick dry towel & swimwear");
+
+    regionalChecklist.forEach((itemText, idx) => {
+      const item = document.createElement("div");
+      item.className = "checklist-item";
+      item.innerHTML = `
+        <input type="checkbox" id="chk-item-${idx}">
+        <span>${itemText}</span>
+      `;
+      item.querySelector("input").addEventListener("change", (e) => {
+        item.classList.toggle("checked", e.target.checked);
+      });
+      checklistContainer.appendChild(item);
+    });
+
+    // J. TRAVEL TIPS & LOCAL ETIQUETTE
+    document.getElementById("travel-tips-desc").innerHTML = `
+      <p>💵 <strong>Local Currency:</strong> ${data.currency}</p>
+      <p style="margin-top: 8px;">🗣️ <strong>Local Languages:</strong> ${data.language}</p>
+      <p style="margin-top: 8px;">🤝 <strong>Etiquette Tip:</strong> ${data.localEtiquette}</p>
+      <p style="margin-top: 8px;">🛡️ <strong>Safety Advisory:</strong> ${data.safetyTips}</p>
+      <p style="margin-top: 8px;">📞 <strong>Emergency Help:</strong> ${data.emergencyContacts}</p>
+      <p style="margin-top: 8px;">📶 <strong>Cellular Network Info:</strong> ${data.simInfo}</p>
+    `;
+  },
+
+  calculateLocalBudget(existsInDb) {
+    const isInternational = this.destination.includes("Tokyo") || this.destination.includes("Paris") || this.destination.includes("Bali");
+    const numDays = this.tripDuration;
+    const numTravelers = this.travelersCount;
+    
+    let scalePerDay = 1500;
+    if (this.budgetTier === "Backpacking") scalePerDay = 1200;
+    else if (this.budgetTier === "Budget") scalePerDay = 2500;
+    else if (this.budgetTier === "Mid-range") scalePerDay = 6000;
+    else if (this.budgetTier === "Luxury") scalePerDay = 18000;
+
+    if (isInternational) {
+      if (this.destination.includes("Tokyo")) {
+        let yenPerDay = 6000;
+        if (this.budgetTier === "Backpacking") yenPerDay = 4000;
+        else if (this.budgetTier === "Budget") yenPerDay = 10000;
+        else if (this.budgetTier === "Mid-range") yenPerDay = 22000;
+        else if (this.budgetTier === "Luxury") yenPerDay = 75000;
+
+        return {
+          flights: 85000 * numTravelers,
+          hotel: yenPerDay * 0.45 * numDays * numTravelers,
+          food: yenPerDay * 0.25 * numDays * numTravelers,
+          transport: yenPerDay * 0.1 * numDays * numTravelers,
+          activities: yenPerDay * 0.1 * numDays * numTravelers,
+          shopping: yenPerDay * 0.05 * numDays * numTravelers,
+          emergency: 15000
+        };
+      } else if (this.destination.includes("Paris")) {
+        let euroPerDay = 45;
+        if (this.budgetTier === "Backpacking") euroPerDay = 35;
+        else if (this.budgetTier === "Budget") euroPerDay = 75;
+        else if (this.budgetTier === "Mid-range") euroPerDay = 170;
+        else if (this.budgetTier === "Luxury") euroPerDay = 600;
+
+        return {
+          flights: 650 * numTravelers,
+          hotel: Math.round(euroPerDay * 0.45 * numDays * numTravelers),
+          food: Math.round(euroPerDay * 0.25 * numDays * numTravelers),
+          transport: Math.round(euroPerDay * 0.1 * numDays * numTravelers),
+          activities: Math.round(euroPerDay * 0.1 * numDays * numTravelers),
+          shopping: Math.round(euroPerDay * 0.05 * numDays * numTravelers),
+          emergency: 100
+        };
+      } else {
+        let idrPerDay = 300;
+        if (this.budgetTier === "Backpacking") idrPerDay = 200;
+        else if (this.budgetTier === "Budget") idrPerDay = 500;
+        else if (this.budgetTier === "Mid-range") idrPerDay = 1200;
+        else if (this.budgetTier === "Luxury") idrPerDay = 4500;
+
+        return {
+          flights: 4500 * numTravelers,
+          hotel: idrPerDay * 0.45 * numDays * numTravelers,
+          food: idrPerDay * 0.25 * numDays * numTravelers,
+          transport: idrPerDay * 0.1 * numDays * numTravelers,
+          activities: idrPerDay * 0.1 * numDays * numTravelers,
+          shopping: idrPerDay * 0.05 * numDays * numTravelers,
+          emergency: 500
+        };
+      }
+    }
+
+    return {
+      flights: 7500 * numTravelers,
+      hotel: scalePerDay * 0.4 * numDays * numTravelers,
+      food: scalePerDay * 0.25 * numDays * numTravelers,
+      transport: scalePerDay * 0.15 * numDays * numTravelers,
+      activities: scalePerDay * 0.1 * numDays * numTravelers,
+      shopping: scalePerDay * 0.05 * numDays * numTravelers,
+      emergency: 2500
+    };
+  },
+
+  generateFallbackDataset(dest) {
+    return {
+      region: "Custom Zone",
+      currency: "Local Currency",
+      language: "English & Local languages",
+      localEtiquette: "Respect traditional customs; do not litter; bargain politely.",
+      safetyTips: "Drink bottled water; travel before dark; keep emergency lines saved.",
+      emergencyContacts: "Police: 112 / 911, Hotel Frontdesk Helpline",
+      simInfo: "Tourist SIM profiles or local airport telecom booths are recommended.",
+      accommodations: {
+        "Backpacking": { name: `${dest} Backpacker Loft`, price: "$20/night", pros: "Social room, clean shared bathrooms, budget friendly." },
+        "Budget": { name: `${dest} Eco Homestay`, price: "$45/night", pros: "Quiet location, clean room, locally run." },
+        "Mid-range": { name: `${dest} Central Plaza Hotel`, price: "$110/night", pros: "Central transit access, clean private rooms." },
+        "Luxury": { name: `${dest} Grand Royal Resort & Spa`, price: "$350/night", pros: "Five star pools, fine dining room, health center." }
+      },
+      transport: { desc: "Local taxis, metro transit networks, and bicycle hires work well." },
+      food: { local: "Authentic local specialties, street side delicacies, and traditional breads.", restaurants: "Central Square Diners and local market stalls." },
+      attractions: [
+        { name: `${dest} Historic Landmark`, why: "An essential cultural stop representing the history of this city.", dur: "2 hours", fee: "Free", time: "Morning" },
+        { name: `${dest} Scenic Lookout`, why: "Offers breathtaking elevated views across the valley.", dur: "2 hours", fee: "Free", time: "Afternoon" }
+      ],
+      hiddenGems: [{ name: `${dest} Local Artisan Alley`, desc: "A cozy collection of handcrafted gift shops and painting galleries." }],
+      packing: ["Comfortable hiking or walking shoes", "Sun protective shades", "Refillable water flask"],
+      itineraryDays: [
+        { day: 1, title: `Welcome to ${dest}`, activities: { morning: "Arrive in the city, check in at hotel.", afternoon: "Walk central streets, sample street sides delicacies.", evening: "Enjoy dinner at traditional diner." } },
+        { day: 2, title: "Scenic Exploration", activities: { morning: "Visit the historic monument, learn regional history.", afternoon: "Hike to the scenic lookout path for sunset photos.", evening: "Relax at local square with live music." } }
+      ]
+    };
+  },
+
+  // 4. LIVE GEMINI AI ITINERARY GENERATOR
+  async fetchGeminiItinerary() {
+    const prompt = `You are a professional AI Travel Planner agent. Generate a detailed travel itinerary matching these settings:
+- Destination: ${this.destination}
+- Departure City: ${this.departureCity}
+- Travelers: ${this.travelersCount}
+- Travel Start Date: ${this.travelDate}
+- Duration: ${this.tripDuration} days
+- Budget Style: ${this.budgetTier}
+- Core Interest: ${this.interests.join(", ")}
+- Local Transport Preference: ${this.transportation}
+- Hotel Style Preference: ${this.accommodation}
+- Dietary restrictions: ${this.dietary}
+- Special requests: ${this.specialRequests || "None"}
+
+You MUST return your output strictly in JSON format. Do NOT wrap the JSON inside markdown code blocks (such as \`\`\`json ... \`\`\`), just return the raw JSON object. The JSON keys and types must match this structure:
+{
+  "region": "The region or zone of the destination",
+  "currency": "The official currency used locally",
+  "language": "Local languages spoken",
+  "localEtiquette": "Local manners and customs guidelines",
+  "safetyTips": "Essential safety rules and travel guidelines",
+  "emergencyContacts": "Emergency telephone numbers",
+  "simInfo": "Local cellular SIM profiles and airport connectivity suggestions",
+  "budgetEstimates": {
+    "flights": 12000,
+    "hotel": 15000,
+    "food": 6000,
+    "transport": 4500,
+    "activities": 3000,
+    "shopping": 2000,
+    "emergency": 2500
+  },
+  "accommodations": {
+    "Backpacking": { "name": "Best hostel name", "price": "Approx cost in local currency", "pros": "Brief pros" },
+    "Budget": { "name": "Best budget homestay", "price": "Approx cost in local currency", "pros": "Brief pros" },
+    "Mid-range": { "name": "Best 3-star comfort hotel", "price": "Approx cost in local currency", "pros": "Brief pros" },
+    "Luxury": { "name": "Best luxury resort", "price": "Approx cost in local currency", "pros": "Brief pros" }
+  },
+  "transport": {
+    "desc": "Airport transfers, local transport advice, estimated travel times, and money-saving tips."
+  },
+  "food": {
+    "local": "List of local specialties and street food to try",
+    "restaurants": "Curated list of famous local restaurants or diners"
+  },
+  "attractions": [
+    { "name": "Attraction 1", "why": "Why visit this spot", "dur": "Duration of visit", "fee": "Entry fee", "time": "Best visiting time" },
+    { "name": "Attraction 2", "why": "Why visit this spot", "dur": "Duration of visit", "fee": "Entry fee", "time": "Best visiting time" }
+  ],
+  "hiddenGems": [
+    { "name": "Lesser known spot 1", "desc": "Short description of this unique local experience" }
+  ],
+  "packing": [
+    "Item 1 to pack", "Item 2 to pack"
+  ],
+  "itineraryDays": [
+    {
+      "day": 1,
+      "title": "Short title describing Day 1 theme",
+      "activities": {
+        "morning": "Detailed morning activity",
+        "afternoon": "Detailed afternoon activity",
+        "evening": "Detailed evening activity"
+      }
+    }
+  ]
+}
+
+The "itineraryDays" array MUST contain exactly ${this.tripDuration} items representing each day of the trip. The costs in the "budgetEstimates" object should be numbers representing local currency values corresponding to the budget tier.`;
+
+    const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${this.apiKey}`;
+    const response = await fetch(url, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        contents: [{
+          parts: [{ text: prompt }]
+        }],
+        generationConfig: {
+          responseMimeType: "application/json"
+        }
+      })
+    });
+
+    if (!response.ok) {
+      const errData = await response.json().catch(() => ({}));
+      throw new Error(errData.error?.message || response.statusText);
+    }
+
+    const resJson = await response.json();
+    let text = resJson.candidates?.[0]?.content?.parts?.[0]?.text;
+    if (!text) throw new Error("Empty response returned from Gemini.");
+    
+    text = text.trim();
+    if (text.startsWith("```")) {
+      text = text.replace(/^```json\s*/i, "").replace(/```$/, "").trim();
+    }
+    return JSON.parse(text);
+  },
+
+  renderLiveItinerary(data) {
+    this.emptyState.classList.add("hidden");
+    this.dashboardView.classList.remove("hidden");
+
+    // A. TRIP SUMMARY RENDER
+    document.getElementById("sum-dest").textContent = this.destination;
+    document.getElementById("sum-days").textContent = `${this.tripDuration} Days`;
+    document.getElementById("sum-dates").textContent = this.formatDateRange(this.travelDate, this.tripDuration);
+    
+    let travelersDesc = `${this.travelersCount} Person`;
+    if (this.travelersCount === 2) travelersDesc = "Couple (2 People)";
+    else if (this.travelersCount > 2) travelersDesc = `${this.travelersCount} Travelers`;
+    document.getElementById("sum-travelers").textContent = travelersDesc;
+    
+    document.getElementById("sum-style").textContent = this.budgetTier;
+
+    // B. BUDGET ESTIMATIONS
+    const budgetCosts = data.budgetEstimates || {};
+    const breakdownList = document.getElementById("budget-breakdown-list");
+    breakdownList.innerHTML = "";
+    
+    const labelMapping = {
+      flights: "✈️ Flights / Travel",
+      hotel: "🏨 Hotel Lodging",
+      food: "🍜 Local Cuisine",
+      transport: "🚗 Local Transport",
+      activities: "🧗 Sights & Entry Fees",
+      shopping: "🛍️ Local Shopping",
+      emergency: "⚠️ Emergency Buffer"
+    };
+
+    const currencyStr = (data.currency || "").toUpperCase();
+    let currencySymbol = "₹";
+    if (currencyStr.includes("YEN") || currencyStr.includes("JPY") || this.destination.includes("Tokyo")) currencySymbol = "¥";
+    else if (currencyStr.includes("EURO") || currencyStr.includes("EUR") || this.destination.includes("Paris")) currencySymbol = "€";
+    else if (currencyStr.includes("USD") || currencyStr.includes("DOLLAR")) currencySymbol = "$";
+    
+    let totalEstimatedSum = 0;
+
+    Object.keys(labelMapping).forEach(key => {
+      const itemCost = budgetCosts[key] || 0;
+      totalEstimatedSum += itemCost;
+
+      const chartItem = document.createElement("div");
+      chartItem.className = "budget-chart-item";
+      chartItem.innerHTML = `
+        <div class="budget-chart-lbl">
+          <span>${labelMapping[key]}</span>
+          <strong>${currencySymbol}${itemCost.toLocaleString()}</strong>
+        </div>
+        <div class="budget-bar-track">
+          <div class="budget-bar-fill"></div>
+        </div>
+      `;
+      breakdownList.appendChild(chartItem);
+    });
+
+    document.getElementById("sum-total-budget").textContent = `${currencySymbol}${totalEstimatedSum.toLocaleString()}`;
+
+    // Animate fill bars
+    setTimeout(() => {
+      const fills = breakdownList.querySelectorAll(".budget-bar-fill");
+      let idx = 0;
+      Object.keys(labelMapping).forEach(key => {
+        const itemCost = budgetCosts[key] || 0;
+        const percent = totalEstimatedSum > 0 ? (itemCost / totalEstimatedSum) * 100 : 0;
+        fills[idx].style.width = `${percent}%`;
+        idx++;
+      });
+    }, 150);
+
+    // C. DAY BY DAY ITINERARY RENDER
+    const dayByDayList = document.getElementById("day-by-day-list");
+    dayByDayList.innerHTML = "";
+    
+    const totalItineraryDays = data.itineraryDays || [];
+
+    totalItineraryDays.forEach((dayData, idx) => {
+      const dayNum = idx + 1;
+      const dayCostVal = Math.round((budgetCosts.activities || 0) / this.tripDuration) + Math.round((budgetCosts.food || 0) / this.tripDuration);
+      
+      const dayBlock = document.createElement("div");
+      dayBlock.className = "day-block";
+      dayBlock.innerHTML = `
+        <div class="day-header">
+          <h3>Day ${dayNum}: ${dayData.title || `Exploring ${this.destination}`}</h3>
+          <span class="day-cost-tag">Est. Day Spend: ${currencySymbol}${dayCostVal.toLocaleString()}</span>
+        </div>
+        <div class="day-timeline">
+          <div class="time-slot">
+            <span class="time-label">Morning</span>
+            <div class="slot-detail">
+              <h4>Activity & Exploration</h4>
+              <p>${dayData.activities?.morning || "Exploration"}</p>
+            </div>
+          </div>
+          <div class="time-slot">
+            <span class="time-label">Afternoon</span>
+            <div class="slot-detail">
+              <h4>Sightseeing & Lunch</h4>
+              <p>${dayData.activities?.afternoon || "Sightseeing"}</p>
+            </div>
+          </div>
+          <div class="time-slot">
+            <span class="time-label">Evening</span>
+            <div class="slot-detail">
+              <h4>Dinner & Culture</h4>
+              <p>${dayData.activities?.evening || "Dinner"}</p>
+            </div>
+          </div>
+        </div>
+        <div class="day-meta-footer">
+          <span>🚗 Transit: via ${this.transportation}</span>
+          <span>🍲 Food Plan: ${this.dietary === "None" ? "Standard regional cuisine" : `${this.dietary} dietary check`}</span>
+        </div>
+      `;
+      dayByDayList.appendChild(dayBlock);
+    });
+
+    // D. ACCOMMODATION RECOMMENDATIONS RENDER
+    const lodgingList = document.getElementById("hotels-suggestions-list");
+    lodgingList.innerHTML = "";
+    
+    const budgetTiersList = ["Backpacking", "Budget", "Mid-range", "Luxury"];
+    const apiAccommodations = data.accommodations || {};
+    
+    budgetTiersList.forEach(tier => {
+      const lodgingInfo = apiAccommodations[tier] || { name: "Recommended Lodge", price: "N/A", pros: "Fits style requirements" };
+      const isSelectedTier = (tier === this.budgetTier);
+      
+      const itemCard = document.createElement("div");
+      itemCard.className = "list-item-card";
+      if (isSelectedTier) {
+        itemCard.style.borderColor = "var(--primary-color)";
+        itemCard.style.background = "rgba(99,102,241,0.05)";
+      }
+      
+      itemCard.innerHTML = `
+        <div style="display: flex; justify-content: space-between; align-items: center;">
+          <span class="card-tag">${tier} Option</span>
+          <strong class="highlight">${lodgingInfo.price}</strong>
+        </div>
+        <h4>${lodgingInfo.name} ${isSelectedTier ? "⭐ (Selected Style)" : ""}</h4>
+        <p>${lodgingInfo.pros}</p>
+      `;
+      lodgingList.appendChild(itemCard);
+    });
+
+    // E. TRANSPORTATION DESCRIPTION RENDER
+    document.getElementById("transport-plan-desc").innerHTML = `
+      <p><strong>Primary Choice:</strong> ${this.transportation}</p>
+      <p style="margin-top: 8px;">${data.transport?.desc || "No transit notes provided."}</p>
+    `;
+
+    // F. FOOD RECOMMENDATIONS RENDER
+    let dietPrefix = "";
+    if (this.dietary !== "None") {
+      dietPrefix = `<p style="color:var(--success-color); font-weight:600; margin-bottom:8px;">🥗 Adjusted for: ${this.dietary} Diet</p>`;
+    }
+    document.getElementById("food-recommend-desc").innerHTML = `
+      ${dietPrefix}
+      <p><strong>Local Specialties:</strong> ${data.food?.local || "Sample regional dishes."}</p>
+      <p style="margin-top: 8px;"><strong>Famous Spots:</strong> ${data.food?.restaurants || "Look for street side eateries."}</p>
+    `;
+
+    // G. KEY ATTRACTIONS LIST
+    const attractionsList = document.getElementById("key-attractions-list");
+    attractionsList.innerHTML = "";
+    const apiAttractions = data.attractions || [];
+    apiAttractions.forEach(attr => {
+      const card = document.createElement("div");
+      card.className = "list-item-card";
+      card.innerHTML = `
+        <h4>🌟 ${attr.name}</h4>
+        <p><strong>Why Visit:</strong> ${attr.why}</p>
+        <div class="day-meta-footer" style="border:none; padding:0; margin-top:4px;">
+          <span>⏳ Time: ${attr.dur}</span>
+          <span>🎟️ Entry Fee: ${attr.fee}</span>
+          <span>☀️ Best Visit: ${attr.time}</span>
+        </div>
+      `;
+      attractionsList.appendChild(card);
+    });
+
+    // H. HIDDEN GEMS LIST
+    const gemsList = document.getElementById("hidden-gems-list");
+    gemsList.innerHTML = "";
+    const apiGems = data.hiddenGems || [];
+    apiGems.forEach(gem => {
+      const card = document.createElement("div");
+      card.className = "list-item-card";
+      card.innerHTML = `
+        <h4>💎 ${gem.name}</h4>
+        <p>${gem.desc}</p>
+      `;
+      gemsList.appendChild(card);
+    });
+
+    // I. CUSTOM PACKING CHECKLIST
+    const checklistContainer = document.getElementById("packing-checklist-elements");
+    checklistContainer.innerHTML = "";
+    const apiPacking = data.packing || ["Comfortable walking shoes", "Travel health documents", "Power bank"];
+    
+    apiPacking.forEach((itemText, idx) => {
+      const item = document.createElement("div");
+      item.className = "checklist-item";
+      item.innerHTML = `
+        <input type="checkbox" id="chk-item-${idx}">
+        <span>${itemText}</span>
+      `;
+      item.querySelector("input").addEventListener("change", (e) => {
+        item.classList.toggle("checked", e.target.checked);
+      });
+      checklistContainer.appendChild(item);
+    });
+
+    // J. TRAVEL TIPS & LOCAL ETIQUETTE
+    document.getElementById("travel-tips-desc").innerHTML = `
+      <p>💵 <strong>Local Currency:</strong> ${data.currency || "Local Currency"}</p>
+      <p style="margin-top: 8px;">🗣️ <strong>Local Languages:</strong> ${data.language || "Languages"}</p>
+      <p style="margin-top: 8px;">🤝 <strong>Etiquette Tip:</strong> ${data.localEtiquette || "Follow local rules."}</p>
+      <p style="margin-top: 8px;">🛡️ <strong>Safety Advisory:</strong> ${data.safetyTips || "Stay safe."}</p>
+      <p style="margin-top: 8px;">📞 <strong>Emergency Help:</strong> ${data.emergencyContacts || "112 / 911"}</p>
+      <p style="margin-top: 8px;">📶 <strong>Cellular Network Info:</strong> ${data.simInfo || "eSIMs at airport"}</p>
+    `;
+  },
+
+  // 5. LIVE GEMINI CONVERSATIONAL CHAT ADJUSTMENTS
+  async queryGeminiAdjustment(userText) {
+    const prompt = `You are JourneyGenie, an intelligent travel assistant agent. The user is currently viewing their itinerary for:
+- Destination: ${this.destination}
+- Duration: ${this.tripDuration} days
+- Travelers: ${this.travelersCount}
+- Budget Tier: ${this.budgetTier}
+- Transportation: ${this.transportation}
+- Hotel Style: ${this.accommodation}
+- Dietary restrictions: ${this.dietary}
+- Special requests: ${this.specialRequests || "None"}
+
+The user is asking you a question or requesting a modification to this itinerary. Be friendly, conversational, and direct. Explain recommendations briefly. Keep answers to 1-3 paragraphs. Format your response nicely using markdown asterisks (*) for bullet points if listing options.
+
+User message: "${userText}"`;
+
+    const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${this.apiKey}`;
+    const response = await fetch(url, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        contents: [{
+          parts: [{ text: prompt }]
+        }]
+      })
+    });
+
+    if (!response.ok) {
+      const errData = await response.json().catch(() => ({}));
+      throw new Error(errData.error?.message || response.statusText);
+    }
+
+    const resJson = await response.json();
+    return resJson.candidates?.[0]?.content?.parts?.[0]?.text || "I didn't receive a response from the model.";
+  },
+
+  simulateAdjustmentReply(userText) {
+    return new Promise((resolve) => {
+      setTimeout(() => {
+        const textLower = userText.toLowerCase();
+        let response = "";
+        let mutated = false;
+        
+        // 1. Budget tier mutations
+        if (textLower.includes("backpacking") || textLower.includes("backpack")) {
+          this.budgetTier = "Backpacking";
+          mutated = true;
+          response += "✔️ I have adjusted your budget tier to **Backpacking** (optimized for hostels and cheap eats).<br>";
+        } else if (textLower.includes("luxury") || textLower.includes("expensive")) {
+          this.budgetTier = "Luxury";
+          mutated = true;
+          response += "✔️ I have adjusted your budget tier to **Luxury** (optimized for premium hotels and private drivers).<br>";
+        } else if (textLower.includes("mid-range") || textLower.includes("moderate")) {
+          this.budgetTier = "Mid-range";
+          mutated = true;
+          response += "✔️ I have adjusted your budget tier to **Mid-range**.<br>";
+        } else if (textLower.includes("budget") || textLower.includes("cheaper")) {
+          this.budgetTier = "Budget";
+          mutated = true;
+          response += "✔️ I have adjusted your budget tier to **Budget**.<br>";
+        }
+
+        // 2. Duration mutations
+        const durationMatch = textLower.match(/(\d+)\s*day/);
+        if (durationMatch) {
+          const daysVal = parseInt(durationMatch[1]);
+          if (daysVal >= 1 && daysVal <= 10) {
+            this.tripDuration = daysVal;
+            mutated = true;
+            response += `✔️ I have updated your trip duration to **${daysVal} Days** and reconstructed the timeline.<br>`;
+          } else {
+            response += "⚠️ Note: Duration must be between 1 and 10 days.<br>";
+          }
+        }
+
+        // 3. Transportation mutations
+        if (textLower.includes("metro") || textLower.includes("subway") || textLower.includes("train") || textLower.includes("bus")) {
+          this.transportation = "Public Subway / Metro";
+          mutated = true;
+          response += "✔️ Local transit preference set to **Public Subway / Metro**.<br>";
+        } else if (textLower.includes("driver") || textLower.includes("taxi") || textLower.includes("car")) {
+          this.transportation = "Private Driver";
+          mutated = true;
+          response += "✔️ Local transit preference set to **Private Driver**.<br>";
+        } else if (textLower.includes("scooter") || textLower.includes("bike")) {
+          this.transportation = "Rental Scooter";
+          mutated = true;
+          response += "✔️ Local transit preference set to **Rental Scooter**.<br>";
+        }
+
+        // 4. Hotel mutations
+        if (textLower.includes("hostel") || textLower.includes("lodge")) {
+          this.accommodation = "Hostels / Lodges";
+          mutated = true;
+          response += "✔️ Hotel preference set to **Hostels / Lodges**.<br>";
+        } else if (textLower.includes("resort")) {
+          this.accommodation = "Luxury Resorts";
+          mutated = true;
+          response += "✔️ Hotel preference set to **Luxury Resorts**.<br>";
+        } else if (textLower.includes("homestay") || textLower.includes("cottage")) {
+          this.accommodation = "Boutique Homestays";
+          mutated = true;
+          response += "✔️ Hotel preference set to **Boutique Homestays**.<br>";
+        } else if (textLower.includes("hotel")) {
+          this.accommodation = "3-Star Hotels";
+          mutated = true;
+          response += "✔️ Hotel preference set to **3-Star Hotels**.<br>";
+        }
+
+        // 5. Dietary mutations
+        if (textLower.includes("vegetarian") || textLower.includes("veg")) {
+          this.dietary = "Vegetarian";
+          mutated = true;
+          response += "✔️ Dietary restrictions updated to **Vegetarian** (meals adjusted on day blocks).<br>";
+        } else if (textLower.includes("vegan")) {
+          this.dietary = "Vegan";
+          mutated = true;
+          response += "✔️ Dietary restrictions updated to **Vegan**.<br>";
+        } else if (textLower.includes("halal")) {
+          this.dietary = "Halal";
+          mutated = true;
+          response += "✔️ Dietary restrictions updated to **Halal**.<br>";
+        } else if (textLower.includes("none") || textLower.includes("no restriction")) {
+          this.dietary = "None";
+          mutated = true;
+          response += "✔️ Dietary restrictions cleared.<br>";
+        }
+
+        // 6. If mutated, recalculate and re-render dashboard
+        if (mutated) {
+          this.renderLocalItinerary();
+          response += "<br>The dashboard on the right has been dynamically recalculated and updated in real-time! 🌟";
+          resolve(response);
+          return;
+        }
+
+        // 7. General inquiries (food, hotels, sights, etc.)
+        let key = Object.keys(TRAVEL_DATASET).find(k => k.toLowerCase().includes(this.destination.toLowerCase()));
+        let data = key ? TRAVEL_DATASET[key] : this.generateFallbackDataset(this.destination);
+
+        if (textLower.includes("food") || textLower.includes("restaurant") || textLower.includes("eat")) {
+          response = `🍜 **Food & Culinary Tips for ${this.destination}**:<br>* Local Specialties to Try: ${data.food.local}<br>* Famous Diners/Cafes: ${data.food.restaurants}`;
+        } else if (textLower.includes("hotel") || textLower.includes("stay") || textLower.includes("lodg")) {
+          response = `🏨 **Accommodation Recommendations for ${this.destination}**:<br>* Backpacking Option: ${data.accommodations.Backpacking.name} (${data.accommodations.Backpacking.price})<br>* Budget Option: ${data.accommodations.Budget.name} (${data.accommodations.Budget.price})<br>* Mid-range Option: ${data.accommodations.Mid_range?.name || data.accommodations["Mid-range"]?.name || "Standard comfort rooms"}<br>* Luxury Option: ${data.accommodations.Luxury.name} (${data.accommodations.Luxury.price})`;
+        } else if (textLower.includes("sight") || textLower.includes("attraction") || textLower.includes("visit") || textLower.includes("place")) {
+          let sightsList = data.attractions.map(attr => `* **${attr.name}**: ${attr.why} (Duration: ${attr.dur}, Fee: ${attr.fee})`).join("<br>");
+          response = `🌟 **Major Attractions in ${this.destination}**:<br>${sightsList}`;
+        } else if (textLower.includes("gem") || textLower.includes("secret")) {
+          response = `💎 **Hidden Gems in ${this.destination}**:<br>* **${data.hiddenGems[0].name}**: ${data.hiddenGems[0].desc}`;
+        } else if (textLower.includes("pack") || textLower.includes("clothing") || textLower.includes("weather")) {
+          response = `🎒 **Recommended weather packing list for ${this.destination}**:<br>` + data.packing.map(p => `* ${p}`).join("<br>");
+        } else {
+          response = `I've noted your request: "${userText}".<br><br>💡 **Pro-Tip**: You can adjust this itinerary directly in our chat! Try typing:<br>* *"Change budget to luxury"*<br>* *"Set duration to 7 days"*<br>* *"Use subway transportation"*<br>* *"Update dietary to vegetarian"*<br>* Or ask about: *"local food"*, *"sights to visit"*, or *"lodging options"*.`;
+        }
+        resolve(response);
+      }, 800);
+    });
+  },
+
+  // Helper date formatting
+  formatDateRange(startDateStr, durationDays) {
+    if (!startDateStr || startDateStr === "Next Month") {
+      const today = new Date();
+      today.setDate(today.getDate() + 30);
+      startDateStr = today.toISOString().split("T")[0];
+    }
+    const start = new Date(startDateStr);
+    const end = new Date(startDateStr);
+    end.setDate(end.getDate() + durationDays - 1);
+    
+    const options = { month: 'short', day: 'numeric' };
+    return `${start.toLocaleDateString('en-US', options)} - ${end.toLocaleDateString('en-US', options)}, ${start.getFullYear()}`;
+  }
+};
+
+// Initialize App
+window.addEventListener("DOMContentLoaded", () => {
+  JourneyGenie.init();
+});
+
+</script>
+</body>
+</html>
