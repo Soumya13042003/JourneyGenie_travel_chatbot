@@ -48,7 +48,7 @@ Run a clean local development server:
 ```bash
 node server.js
 ```
-Then navigate to **[http://localhost:3000/](http://localhost:3000/)** in your browser.
+
 
 ---
 
