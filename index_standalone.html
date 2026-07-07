@@ -1836,6 +1836,11 @@ const JourneyGenie = {
     this.dashboardView = document.getElementById("dashboard-view");
     this.printItineraryBtn = document.getElementById("print-itinerary-btn");
     this.resetChatBtn = document.getElementById("reset-chat-btn");
+    
+    // Theme elements
+    this.themeToggleBtn = document.getElementById("theme-toggle");
+    this.sunIcon = document.getElementById("sun-icon");
+    this.moonIcon = document.getElementById("moon-icon");
   },
 
   registerEvents() {
@@ -1887,6 +1892,27 @@ const JourneyGenie = {
     // Reset Chat action
     if (this.resetChatBtn) {
       this.resetChatBtn.addEventListener("click", () => this.resetSession(true));
+    }
+
+    // Theme Toggle action
+    if (this.themeToggleBtn) {
+      this.themeToggleBtn.addEventListener("click", () => this.toggleTheme());
+    }
+  },
+
+  toggleTheme() {
+    const docHtml = document.documentElement;
+    const currentTheme = docHtml.getAttribute("data-theme");
+    const newTheme = (currentTheme === "dark") ? "light" : "dark";
+    docHtml.setAttribute("data-theme", newTheme);
+    
+    // Toggle icon visibility
+    if (newTheme === "light") {
+      this.sunIcon.classList.remove("hidden");
+      this.moonIcon.classList.add("hidden");
+    } else {
+      this.sunIcon.classList.add("hidden");
+      this.moonIcon.classList.remove("hidden");
     }
   },
 
